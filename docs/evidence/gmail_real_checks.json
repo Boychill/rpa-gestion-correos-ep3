@@ -1,0 +1,42 @@
+{
+  "checked_at": "2026-11-18T22:01:57.573457+00:00",
+  "campaign_id": "4aa43f17-2bb2-420a-96cd-0f91bee700a9",
+  "accepted": 500,
+  "received": 500,
+  "correct": 500,
+  "duplicates": 0,
+  "missing": 0,
+  "categories": {
+    "Consulta": 84,
+    "Información": 83,
+    "Otros": 83,
+    "Reclamo": 83,
+    "Solicitud": 84,
+    "Urgente": 83
+  },
+  "source": "GMAIL_REAL",
+  "inbox": 328,
+  "spam": 172,
+  "mailbox_modified": false,
+  "sender_verified_by_received_from": true,
+  "correlation": "dataset_uuid_and_individual_sequence_plus_from",
+  "message_id_rewritten_by_gmail": true,
+  "last_send_execution": "49e773db-9810-4781-acab-38e6362baa9a",
+  "last_send_requests": 499,
+  "last_send_duration_seconds": 873.257,
+  "analysis_execution": "cf2a00e0-5d42-4d10-b39c-d58dfebf45e7",
+  "analysis_http_queries": 508,
+  "consolidated_report": {
+    "execution_id": "63fd45e6-4b0b-547d-864d-1f3e66992273",
+    "rows": 500,
+    "sha256": "f0830c1da0548c45c9102a521b81fb8185a6af75017d37677adfb41fdb5f1f32",
+    "size": 34304,
+    "mail_mode": "DRY_RUN"
+  },
+  "supabase_queue": {
+    "SYNCED": 1409
+  },
+  "desktop_ui_smoke": "PASSED_OFFLINE_SIMULATION_6",
+  "excel_desktop": "BLOCKED_EXCEL_COM_UNAVAILABLE",
+  "report_email": "PENDING_REPORT_TO"
+}

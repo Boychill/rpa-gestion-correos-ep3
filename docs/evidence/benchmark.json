@@ -1,0 +1,104 @@
+{
+  "source": "FIXTURE",
+  "measured_at": "2026-11-18T16:31:31.965692+00:00",
+  "platform": "Windows-10-10.0.19045-SP0",
+  "python": "3.13.14",
+  "cpu": "AMD64 Family 23 Model 24 Stepping 1, AuthenticAMD",
+  "batch_size": 100,
+  "page_size": 100,
+  "memory_note": "tracemalloc: asignaciones Python; no es pico RSS ni memoria Office",
+  "results": [
+    {
+      "count": 100,
+      "seconds": 2.3621,
+      "throughput": 42.34,
+      "python_peak_bytes": 3562562,
+      "metrics": {
+        "new": 100,
+        "updated": 0,
+        "duplicates": 0,
+        "removed": 0,
+        "reading_complete": true,
+        "processed": 100,
+        "classified": 100,
+        "failed": 0,
+        "duration_seconds": 2.1026,
+        "total_active_seconds": 2.1026,
+        "queries": 1,
+        "http_queries": 0,
+        "retries": 0,
+        "messages_per_second": 47.56
+      },
+      "status": "COMPLETED"
+    },
+    {
+      "count": 300,
+      "seconds": 2.8296,
+      "throughput": 106.02,
+      "python_peak_bytes": 3589599,
+      "metrics": {
+        "new": 300,
+        "updated": 0,
+        "duplicates": 0,
+        "removed": 0,
+        "reading_complete": true,
+        "processed": 300,
+        "classified": 300,
+        "failed": 0,
+        "duration_seconds": 2.6129,
+        "total_active_seconds": 2.6129,
+        "queries": 3,
+        "http_queries": 0,
+        "retries": 0,
+        "messages_per_second": 114.81
+      },
+      "status": "COMPLETED"
+    },
+    {
+      "count": 500,
+      "seconds": 3.9142,
+      "throughput": 127.74,
+      "python_peak_bytes": 4141669,
+      "metrics": {
+        "new": 500,
+        "updated": 0,
+        "duplicates": 0,
+        "removed": 0,
+        "reading_complete": true,
+        "processed": 500,
+        "classified": 500,
+        "failed": 0,
+        "duration_seconds": 3.7003,
+        "total_active_seconds": 3.7003,
+        "queries": 5,
+        "http_queries": 0,
+        "retries": 0,
+        "messages_per_second": 135.12
+      },
+      "status": "COMPLETED"
+    },
+    {
+      "count": 1000,
+      "seconds": 8.7702,
+      "throughput": 114.02,
+      "python_peak_bytes": 10707009,
+      "metrics": {
+        "new": 1000,
+        "updated": 0,
+        "duplicates": 0,
+        "removed": 0,
+        "reading_complete": true,
+        "processed": 1000,
+        "classified": 1000,
+        "failed": 0,
+        "duration_seconds": 8.3997,
+        "total_active_seconds": 8.3997,
+        "queries": 10,
+        "http_queries": 0,
+        "retries": 0,
+        "messages_per_second": 119.05
+      },
+      "status": "COMPLETED"
+    }
+  ]
+}

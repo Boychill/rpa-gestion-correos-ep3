@@ -1,0 +1,14 @@
+stateDiagram-v2
+  [*] --> PREPARADO: manifiesto y trabajo persistidos
+  PREPARADO --> EN_ENVIO: llamada autorizada
+  EN_ENVIO --> ACEPTADO: respuesta con ID Gmail
+  EN_ENVIO --> ENVIO_INCIERTO: timeout, 5xx o caida
+  EN_ENVIO --> PENDIENTE_CUOTA: rechazo explicito de cuota
+  EN_ENVIO --> ERROR: permiso, API o autenticacion
+  ACEPTADO --> RECEPCION_CONFIRMADA: Message-ID y From en receptor
+  ENVIO_INCIERTO --> RECEPCION_CONFIRMADA: reconciliacion positiva
+  ENVIO_INCIERTO --> REVISION: sin evidencia suficiente
+  PENDIENTE_CUOTA --> PREPARADO: fecha cumplida y quedan intentos
+  PENDIENTE_CUOTA --> REVISION: tres intentos agotados
+  ERROR --> REVISION
+  RECEPCION_CONFIRMADA --> [*]

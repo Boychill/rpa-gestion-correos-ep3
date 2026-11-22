@@ -1,0 +1,51 @@
+{
+  "checked_at": "2026-11-20T06:27:55.647447+00:00",
+  "mail_sent": false,
+  "campaigns": [
+    {
+      "campaign": "4aa43f17-2bb2-420a-96cd-0f91bee700a9",
+      "expected": 500,
+      "folders": {
+        "all": {
+          "count": 500,
+          "complete": true
+        },
+        "inbox": {
+          "count": 328,
+          "complete": true
+        },
+        "spam": {
+          "count": 172,
+          "complete": true
+        },
+        "trash": {
+          "count": 0,
+          "complete": true
+        }
+      }
+    },
+    {
+      "campaign": "a03b8496-6214-4a6e-b6fc-d6adbfabb7d7",
+      "expected": 6,
+      "folders": {
+        "all": {
+          "count": 0,
+          "complete": true
+        },
+        "inbox": {
+          "count": 0,
+          "complete": true
+        },
+        "spam": {
+          "count": 0,
+          "complete": true
+        },
+        "trash": {
+          "count": 0,
+          "complete": true
+        }
+      }
+    }
+  ],
+  "receiver_identity_verified": true
+}

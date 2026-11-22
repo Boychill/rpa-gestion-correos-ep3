@@ -1,0 +1,47 @@
+<!doctype html><html lang="es"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>RPA EP3 · Auditoría</title><style>
+body{font:16px system-ui;background:#f0f4f8;color:#16324f;margin:0}main{max-width:1150px;margin:auto;padding:32px}
+h1{font-size:32px}section{background:white;padding:24px;margin:20px 0;border-radius:12px;border:1px solid #d7e1eb}
+button,a.button{background:#145d73;color:white;border:0;padding:10px 16px;border-radius:6px;cursor:pointer;text-decoration:none}
+input,select{padding:9px;border:1px solid #acbfd0;border-radius:4px;margin:4px}table{border-collapse:collapse;width:100%;font-size:13px}
+td,th{text-align:left;padding:10px;border-bottom:1px solid #dbe4ee;white-space:nowrap}pre{white-space:pre-wrap}
+.id-button{background:#e5f1f4;color:#145d73;padding:5px 8px;font:inherit}#downloads a{display:inline-block;margin:0 16px 6px 0}
+.scroll{overflow:auto;max-height:440px}.muted{color:#53677c}#error{color:#a22}label{display:inline-block}button:disabled{opacity:.5}
+</style><main><p class="muted">AUTOMATIZACIÓN DE PROCESOS · EP3</p><h1>Gestión de correos</h1>
+<p>Auditoría local. Fechas de las tablas en hora de Santiago; filtros en UTC. Selecciona una ejecución para ver sus eventos.</p><p id="error" role="alert"></p>
+<section><h2>Ejecuciones</h2><button onclick="reload()">Actualizar</button><div id="runs" class="scroll"></div></section>
+<section><h2>Eventos y errores</h2><label>Ejecución <input id="execution_id" placeholder="UUID"></label>
+<label>Nivel <select id="level"><option value="">Todos</option><option>INFO</option><option>ERROR</option></select></label>
+<label>Módulo <input id="module" placeholder="read_page"></label><label>Desde UTC <input id="start" type="datetime-local"></label>
+<label>Hasta UTC <input id="end" type="datetime-local"></label><button onclick="events()">Filtrar</button>
+<p id="downloads"></p><div id="events" class="scroll"></div></section>
+<section><h2>Historial Supabase y carpeta de logs</h2>
+<p id="cloudStatus"></p><p>Las copias se guardan en la carpeta de logs del equipo y caducan según la retención configurada. El historial y el estado de recuperación se conservan.</p>
+<button onclick="syncLogs()">Sincronizar Supabase</button>
+<button onclick="saveLogs('LOCAL')">Guardar logs locales</button>
+<button onclick="saveLogs('SUPABASE')">Descargar logs de Supabase</button>
+<p class="muted">Se usa el filtro de ejecución de arriba; vacío incluye todas las ejecuciones de este equipo.</p>
+<pre id="logResult"></pre><div id="logFiles"></div></section>
+<section><h2>Exportar y limpiar</h2><p id="storage"></p>
+<p>Solo aparecen logs vencidos de ejecuciones cerradas. SQLite, pendientes, cursores y reportes están protegidos.</p>
+<div id="files"></div><button onclick="exportSelected()">Preparar ZIP de la selección</button>
+<div id="confirmation" hidden><pre id="manifest"></pre><a id="archive" class="button">Descargar archivo</a>
+<p>La descarga HTTP no confirma que guardaste el archivo. Ábrelo y verifica su manifiesto antes de continuar.</p>
+<label><input type="checkbox" id="saved">Guardé y verifiqué mi copia</label>
+<p><label>Escribe la frase indicada <input id="phrase" size="52"></label></p>
+<button onclick="clean()">Confirmar eliminación de los originales seleccionados</button></div><pre id="cleanupResult"></pre></section></main>
+<script>
+const token='__CSRF__';let exportId=null;
+const $=id=>document.getElementById(id);
+async function api(url,body){const r=await fetch(url,body?{method:'POST',headers:{'Content-Type':'application/json','X-CSRF-Token':token},body:JSON.stringify(body)}:{});if(!r.ok)throw Error(await r.text());return r.json()}
+function localDate(v){return v?new Date(v).toLocaleString('es-CL',{timeZone:'America/Santiago'}):'—'}
+function table(id,rows){const wrap=$(id);wrap.replaceChildren();if(!rows.length){wrap.textContent='Sin registros';return}const t=document.createElement('table'),head=t.createTHead().insertRow();Object.keys(rows[0]).forEach(k=>{const th=document.createElement('th');th.textContent=k;head.append(th)});const b=t.createTBody();rows.forEach(row=>{const tr=b.insertRow();Object.entries(row).forEach(([k,v])=>{const cell=tr.insertCell();if(k==='Ejecución'){const button=document.createElement('button');button.className='id-button';button.textContent=v.slice(0,8)+'…';button.title=v;button.onclick=()=>{$('execution_id').value=v;events()};cell.append(button)}else cell.textContent=String(v??'—')})});wrap.append(t)}
+function params(){const p=new URLSearchParams();['execution_id','level','module','start','end'].forEach(id=>{if($(id).value)p.set(id,$(id).value+(id==='start'||id==='end'?':00+00:00':''))});return p}
+async function events(){try{const rows=await api('/api/events?'+params());table('events',rows.map(r=>({'Ejecución':r.execution_id,'Paso':r.step_id,'Inicio (Santiago)':localDate(r.started),'Duración (ms)':r.duration_ms.toFixed(2),'Intento':r.attempt,'Nivel':r.level,'Resultado':r.result,'Código':r.code})));$('downloads').replaceChildren();['log','csv','json','zip'].forEach(f=>{const a=document.createElement('a');a.textContent='Descargar .'+f;a.href='/api/download/'+f+'?'+params();$('downloads').append(a)})}catch(e){$('error').textContent=e.message}}
+async function reload(){try{const rows=await api('/api/executions');table('runs',rows.map(r=>{const m=JSON.parse(r.metrics);return {'Ejecución':r.id,'Inicio (Santiago)':localDate(r.started),'Estado':r.status,'Origen':r.source,'Procesados':m.processed??0,'Clasificados':m.classified??0,'Fallidos':m.failed??0,'Tiempo (s)':(m.duration_seconds??0).toFixed(2)}}));const d=await api('/api/storage');$('storage').textContent='Uso: '+(d.bytes/1048576).toFixed(2)+' MB. Retención (días): '+JSON.stringify(d.retention)+'. '+d.note;$('files').replaceChildren();d.candidates.forEach(f=>{const label=document.createElement('label'),c=document.createElement('input');c.type='checkbox';c.value=f.name;label.append(c,document.createTextNode(f.name+' · '+f.size+' bytes'));$('files').append(label,document.createElement('br'))});await events()}catch(e){$('error').textContent=e.message}}
+async function exportSelected(){try{const names=[...$('files').querySelectorAll('input:checked')].map(e=>e.value);const d=await api('/api/export',{names});exportId=d.id;$('manifest').textContent=JSON.stringify(d,null,2)+'\nFrase: ELIMINAR '+d.id;$('archive').href=d.download;$('confirmation').hidden=false;$('saved').checked=false;$('phrase').value=''}catch(e){$('error').textContent=e.message}}
+async function cloudStatus(){const d=await api('/api/logs/status');$('cloudStatus').textContent='Supabase: '+(d.enabled?'habilitado':'pendiente de configurar')+'. Máximo '+d.max_attempts+' intentos por registro. Cola: '+JSON.stringify(d.counts)+'. Copias: '+d.download_days+' días.';$('logFiles').replaceChildren();d.files.forEach(f=>{const p=document.createElement('p'),a=document.createElement('a');a.textContent=f.name;a.href='/api/logs/files/'+encodeURIComponent(f.name);p.append(a,document.createTextNode(' · vence '+localDate(f.expires)));$('logFiles').append(p)})}
+async function syncLogs(){try{$('logResult').textContent='Sincronizando…';const r=await api('/api/logs/sync',{});$('logResult').textContent=JSON.stringify(r,null,2);await cloudStatus()}catch(e){$('error').textContent=e.message}}
+async function saveLogs(source){try{const r=await api('/api/logs/save',{source,execution_id:$('execution_id').value||null});$('logResult').textContent='Guardado en '+r.folder+' / '+r.name+'\nRegistros: '+r.records+' · SHA256: '+r.sha256;await cloudStatus()}catch(e){$('error').textContent=e.message}}
+async function clean(){try{const d=await api('/api/clean/'+exportId,{confirmation:$('phrase').value,saved_copy:$('saved').checked});$('cleanupResult').textContent=JSON.stringify(d,null,2);$('confirmation').hidden=true;await reload()}catch(e){$('error').textContent=e.message}}reload();cloudStatus().catch(e=>{$('error').textContent=e.message});
+</script></html>

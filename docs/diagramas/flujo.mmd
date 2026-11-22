@@ -1,0 +1,26 @@
+flowchart TD
+  A[Cliente Desktop y dos roles] --> B[Autorizar explicitamente en navegador]
+  B --> C[Robot: cargar token y bloquear perfil]
+  C --> D[List Gmail: fecha y dataset]
+  D --> E[Get metadata y commit mensajes mas avance]
+  E -->|nextPageToken| D
+  E --> F[History desde inicio del escaneo]
+  F -->|404 una vez| D
+  F --> G[Clasificar lotes con Regex]
+  G --> H[API feriados y plazo Santiago]
+  H --> I[Excel y HTML: cierre, hash y tamano]
+  I --> J{Reporte autorizado y completo}
+  J -->|DRY_RUN| K[Guardar vista previa]
+  J -->|SEND| L[Persistir PREPARADO y EN_ENVIO]
+  L --> M[POST Gmail remitente: una llamada]
+  M -->|200 e ID| N[ACEPTADO: no confirma entrega]
+  M -->|Timeout o 5xx| O[ENVIO_INCIERTO: sin reenvio]
+  M -->|Permiso o cuota| P[ERROR o PENDIENTE_CUOTA]
+  D -->|Transitorio seguro| W[Backoff y Retry-After: maximo 3 intentos]
+  W --> D
+  C -->|Token revocado| X[AUTH_REQUIRED: detener]
+  K --> Q[Auditoria y retencion]
+  N --> Q
+  O --> Q
+  P --> Q
+  X --> Q

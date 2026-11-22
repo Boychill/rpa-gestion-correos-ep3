@@ -1,0 +1,23 @@
+{
+  "checked_at": "2026-11-20T06:23:57.163920+00:00",
+  "send_requests": 0,
+  "roles": {
+    "remitente": {
+      "status": "TOKEN_DISPONIBLE_ENVIO_NO_PROBADO",
+      "oauth_loaded": true,
+      "identity_verified": false,
+      "identity_note": "SEND_ONLY_SELECCION_USUARIO_PENDIENTE_RECEPCION",
+      "duration_ms": 114.311
+    },
+    "receptor": {
+      "status": "PROBADO_REAL",
+      "oauth_loaded": true,
+      "identity_verified": true,
+      "api_enabled_verified": true,
+      "list_http": 200,
+      "messages_on_first_page": 1,
+      "next_page": true,
+      "duration_ms": 3919.828
+    }
+  }
+}

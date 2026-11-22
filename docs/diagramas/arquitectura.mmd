@@ -1,0 +1,26 @@
+flowchart LR
+  OP[Operador Windows] --> AUTH[OAuth explicito en navegador]
+  CLOUD[Google Cloud: cliente y API] --> AUTH
+  AUTH --> S[Token remitente: gmail.send]
+  AUTH --> R[Token receptor: gmail.readonly]
+  S --> GEN[Generador separado: dry run por defecto]
+  GEN -->|execute y cantidad| GMAIL[Gmail API]
+  CLI[main.py: robot local] --> ORQ[Orquestador y locks]
+  R --> READ[Lectura metadata: dataset y fechas]
+  GMAIL --> READ
+  READ --> ORQ
+  ORQ --> CLASS[Regex versionadas por lotes]
+  ORQ --> API[Nager.Date: feriados Chile]
+  ORQ --> XLS[Plantilla Excel: openpyxl y COM]
+  XLS --> REPORT[Un reporte MIME consolidado]
+  S --> REPORT
+  REPORT --> GMAIL
+  READ --> DB[(SQLite: mensajes y checkpoints)]
+  CLASS --> DB
+  REPORT --> DB
+  GEN --> DB
+  DB --> LOG[Auditoria: rol, tiempo, intentos y estados]
+  LOG --> SUPA[Supabase: upsert sanitizado]
+  LOG --> FILES[Logs con caducidad]
+  PANEL[Panel localhost] --> DB
+  PANEL --> FILES

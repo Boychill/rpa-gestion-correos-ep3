@@ -1,0 +1,25 @@
+{
+  "campaign_id": "4aa43f17-2bb2-420a-96cd-0f91bee700a9",
+  "mode": "OFFLINE_VALIDATION",
+  "messages": 500,
+  "correct": 500,
+  "counts": {
+    "Solicitud": 84,
+    "Consulta": 84,
+    "Reclamo": 83,
+    "Urgente": 83,
+    "Información": 83,
+    "Otros": 83
+  },
+  "live_status": {
+    "campaign_id": "4aa43f17-2bb2-420a-96cd-0f91bee700a9",
+    "expected": 500,
+    "states": {
+      "PENDING": 500
+    },
+    "accepted": 0,
+    "all_accepted": false
+  },
+  "oauth_block": "403 org_internal",
+  "emails_sent": 0
+}

@@ -1,0 +1,18 @@
+{
+  "informe_tecnico": {
+    "pages": 13,
+    "all_pages_have_content": true
+  },
+  "presentacion": {
+    "pages": 11,
+    "all_pages_have_content": true
+  },
+  "guion_demo": {
+    "pages": 2,
+    "all_pages_have_content": true
+  },
+  "pptx": {
+    "slides": 11,
+    "overflow_shapes": 0
+  }
+}

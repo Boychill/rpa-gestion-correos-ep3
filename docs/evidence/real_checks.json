@@ -1,0 +1,28 @@
+{
+  "checked_at": "2026-11-18T16:31:13.556047+00:00",
+  "platform": "Windows-10-10.0.19045-SP0",
+  "graph": "NO_PROBADO_SIN_BUZON_AUTORIZADO",
+  "mail_send": "NO_EJECUTADO",
+  "api": [
+    {
+      "year": 2026,
+      "status": "VERIFICADO",
+      "http": 200,
+      "count": 17
+    },
+    {
+      "year": 2027,
+      "status": "VERIFICADO",
+      "http": 200,
+      "count": 17
+    }
+  ],
+  "excel": {
+    "status": "NO_VERIFICADO",
+    "error": "EXCEL_COM_UNAVAILABLE",
+    "com_registered": false
+  },
+  "outlook": {
+    "com_registered": false
+  }
+}

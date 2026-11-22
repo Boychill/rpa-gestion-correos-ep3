@@ -1,0 +1,10 @@
+{
+  "version": "1.0.0",
+  "rules": [
+    {"id": "urgente", "category": "Urgente", "priority": 10, "keywords": ["urgente", "urgencia", "critico", "inmediato"]},
+    {"id": "reclamo", "category": "Reclamo", "priority": 20, "keywords": ["reclamo", "queja", "incumplimiento"]},
+    {"id": "solicitud", "category": "Solicitud", "priority": 30, "keywords": ["solicitud", "solicito", "requiero"]},
+    {"id": "consulta", "category": "Consulta", "priority": 40, "keywords": ["consulta", "pregunta", "duda"]},
+    {"id": "informacion", "category": "Información", "priority": 50, "keywords": ["informacion", "informativo", "aviso", "comunicado"]}
+  ]
+}

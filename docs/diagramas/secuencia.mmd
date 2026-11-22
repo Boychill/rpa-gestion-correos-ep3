@@ -1,0 +1,41 @@
+sequenceDiagram
+  actor Operador
+  participant OAuth as Google OAuth
+  participant Gen as Generador separado
+  participant Sender as Gmail remitente
+  participant Receiver as Gmail receptor
+  participant Bot as Robot local
+  participant DB as SQLite
+  participant API as Feriados Chile
+  participant Excel
+  Operador->>OAuth: Autorizar remitente con send
+  OAuth-->>Bot: Token remitente protegido
+  Operador->>OAuth: Autorizar receptor con readonly
+  OAuth-->>Bot: Token receptor protegido
+  Operador->>Gen: Dataset, cantidad y execute explicitos
+  loop Insumos pendientes
+    Gen->>DB: Trabajo persistente dataset:sequence
+    Gen->>Sender: POST MIME sin retry ambiguo
+    Sender-->>Gen: ID de aceptacion
+    Gen->>DB: ACCEPTED o UNCERTAIN o DEFERRED
+    Sender-->>Receiver: Entrega asincrona no garantizada
+  end
+  Operador->>Bot: Analizar dataset
+  loop Paginas e historial
+    Bot->>Receiver: List y get metadata con readonly
+    Receiver-->>Bot: Metadatos y Message-ID RFC
+    Bot->>DB: Commit de mensajes y avance
+  end
+  Bot->>DB: Clasificacion y correlacion de recepcion
+  Bot->>API: Feriados nacionales por ano
+  API-->>Bot: Fechas y procedencia
+  Bot->>Excel: Plantilla, guardar y verificar, COM si requerido
+  Excel-->>Bot: XLSX cerrado y hash
+  alt Reporte SEND autorizado
+    Bot->>DB: PREPARADO y EN_ENVIO
+    Bot->>Sender: Un consolidado MIME con adjunto
+    Sender-->>Bot: Aceptado o resultado incierto
+    Bot->>DB: Estado durable sin reenvio automatico
+  else DRY_RUN
+    Bot->>DB: Vista previa sin envio
+  end

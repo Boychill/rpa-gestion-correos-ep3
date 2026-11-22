@@ -1,0 +1,78 @@
+{
+  "checked_at": "2026-11-20T06:22:37.350611+00:00",
+  "origin": "REAL_SUPABASE",
+  "status": "VERIFIED",
+  "mail_sent": false,
+  "checks": {
+    "schema_read": "PASSED",
+    "persisted_values": "PASSED",
+    "remote_upsert_no_duplicates": "PASSED",
+    "second_sync_zero_requests": "PASSED",
+    "download_hash_and_content": "PASSED",
+    "unauthenticated_request_denied": "PASSED"
+  },
+  "http": [
+    {
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "status": 401
+    }
+  ],
+  "project_fingerprint": "869d4e82d95b3e62",
+  "sync": {
+    "enabled": true,
+    "configured": true,
+    "counts": {
+      "SYNCED": 1416
+    },
+    "max_attempts": 3,
+    "download_days": 15,
+    "auto_clean_logs": true,
+    "requests": 0,
+    "synced": 0,
+    "status": "SYNCED"
+  },
+  "local_records": 1416,
+  "remote_records": 1416,
+  "download": {
+    "name": "supabase-ee79a474-350e-4f60-827c-e37d15e5f418.log",
+    "sha256": "3fdeaeb4d8aa10a20dd08296a2243f7b539403696948e7bb74bf2b84260e1993",
+    "records": 1416,
+    "created": "2026-11-20T06:22:43.725202+00:00",
+    "expires": "2026-12-05T06:22:43.725236+00:00"
+  },
+  "max_attempts": 3,
+  "retention_days": 15,
+  "duration_seconds": 6.464
+}

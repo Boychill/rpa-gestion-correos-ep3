@@ -1,0 +1,22 @@
+{
+  "all": {
+    "http": 200,
+    "count": 500,
+    "has_next_page": true
+  },
+  "inbox": {
+    "http": 200,
+    "count": 328,
+    "has_next_page": false
+  },
+  "spam": {
+    "http": 200,
+    "count": 172,
+    "has_next_page": false
+  },
+  "trash": {
+    "http": 200,
+    "count": 0,
+    "has_next_page": false
+  }
+}

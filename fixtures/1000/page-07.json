@@ -1,0 +1,706 @@
+{
+  "messages": [
+    {
+      "id": "fixture-000600",
+      "subject": "Solicitud de certificado",
+      "sender": "anon-fixture-11",
+      "received": "2026-01-26T00:00:00+00:00",
+      "modified": "fixture-v1"
+    },
+    {
+      "id": "fixture-000601",
+      "subject": "Consulta sobre horario",
+      "sender": "anon-fixture-12",
+      "received": "2026-01-26T01:00:00+00:00",
+      "modified": "fixture-v1"
+    },
+    {
+      "id": "fixture-000602",
+      "subject": "Reclamo por demora",
+      "sender": "anon-fixture-13",
+      "received": "2026-01-26T02:00:00+00:00",
+      "modified": "fixture-v1"
+    },
+    {
+      "id": "fixture-000603",
+      "subject": "URGENTE: solicitud crítica",
+      "sender": "anon-fixture-14",
+      "received": "2026-01-26T03:00:00+00:00",
+      "modified": "fixture-v1"
+    },
+    {
+      "id": "fixture-000604",
+      "subject": "Información de servicio",
+      "sender": "anon-fixture-15",
+      "received": "2026-01-26T04:00:00+00:00",
+      "modified": "fixture-v1"
+    },
+    {
+      "id": "fixture-000605",
+      "subject": "",
+      "sender": "anon-fixture-16",
+      "received": "2026-01-26T05:00:00+00:00",
+      "modified": "fixture-v1"
+    },
+    {
+      "id": "fixture-000606",
+      "subject": "=1+1",
+      "sender": "anon-fixture-17",
+      "received": "2026-01-26T06:00:00+00:00",
+      "modified": "fixture-v1"
+    },
+    {
+      "id": "fixture-000607",
+      "subject": "consulta y reclamo",
+      "sender": "anon-fixture-18",
+      "received": "2026-01-26T07:00:00+00:00",
+      "modified": "fixture-v1"
+    },
+    {
+      "id": "fixture-000608",
+      "subject": "Solicitud de certificado",
+      "sender": "anon-fixture-19",
+      "received": "2026-01-26T08:00:00+00:00",
+      "modified": "fixture-v1"
+    },
+    {
+      "id": "fixture-000609",
+      "subject": "Consulta sobre horario",
+      "sender": "anon-fixture-20",
+      "received": "2026-01-26T09:00:00+00:00",
+      "modified": "fixture-v1"
+    },
+    {
+      "id": "fixture-000610",
+      "subject": "Reclamo por demora",
+      "sender": "anon-fixture-21",
+      "received": "2026-01-26T10:00:00+00:00",
+      "modified": "fixture-v1"
+    },
+    {
+      "id": "fixture-000611",
+      "subject": "URGENTE: solicitud crítica",
+      "sender": "anon-fixture-22",
+      "received": "2026-01-26T11:00:00+00:00",
+      "modified": "fixture-v1"
+    },
+    {
+      "id": "fixture-000612",
+      "subject": "Información de servicio",
+      "sender": "anon-fixture-23",
+      "received": "2026-01-26T12:00:00+00:00",
+      "modified": "fixture-v1"
+    },
+    {
+      "id": "fixture-000613",
+      "subject": "",
+      "sender": "anon-fixture-24",
+      "received": "2026-01-26T13:00:00+00:00",
+      "modified": "fixture-v1"
+    },
+    {
+      "id": "fixture-000614",
+      "subject": "=1+1",
+      "sender": "anon-fixture-25",
+      "received": "2026-01-26T14:00:00+00:00",
+      "modified": "fixture-v1"
+    },
+    {
+      "id": "fixture-000615",
+      "subject": "consulta y reclamo",
+      "sender": "anon-fixture-26",
+      "received": "2026-01-26T15:00:00+00:00",
+      "modified": "fixture-v1"
+    },
+    {
+      "id": "fixture-000616",
+      "subject": "Solicitud de certificado",
+      "sender": "anon-fixture-27",
+      "received": "2026-01-26T16:00:00+00:00",
+      "modified": "fixture-v1"
+    },
+    {
+      "id": "fixture-000617",
+      "subject": "Consulta sobre horario",
+      "sender": "anon-fixture-28",
+      "received": "2026-01-26T17:00:00+00:00",
+      "modified": "fixture-v1"
+    },
+    {
+      "id": "fixture-000618",
+      "subject": "Reclamo por demora",
+      "sender": "anon-fixture-29",
+      "received": "2026-01-26T18:00:00+00:00",
+      "modified": "fixture-v1"
+    },
+    {
+      "id": "fixture-000619",
+      "subject": "URGENTE: solicitud crítica",
+      "sender": "anon-fixture-30",
+      "received": "2026-01-26T19:00:00+00:00",
+      "modified": "fixture-v1"
+    },
+    {
+      "id": "fixture-000620",
+      "subject": "Información de servicio",
+      "sender": "anon-fixture-00",
+      "received": "2026-01-26T20:00:00+00:00",
+      "modified": "fixture-v1"
+    },
+    {
+      "id": "fixture-000621",
+      "subject": "",
+      "sender": "anon-fixture-01",
+      "received": "2026-01-26T21:00:00+00:00",
+      "modified": "fixture-v1"
+    },
+    {
+      "id": "fixture-000622",
+      "subject": "=1+1",
+      "sender": "anon-fixture-02",
+      "received": "2026-01-26T22:00:00+00:00",
+      "modified": "fixture-v1"
+    },
+    {
+      "id": "fixture-000623",
+      "subject": "consulta y reclamo",
+      "sender": "anon-fixture-03",
+      "received": "2026-01-26T23:00:00+00:00",
+      "modified": "fixture-v1"
+    },
+    {
+      "id": "fixture-000624",
+      "subject": "Solicitud de certificado",
+      "sender": "anon-fixture-04",
+      "received": "2026-01-27T00:00:00+00:00",
+      "modified": "fixture-v1"
+    },
+    {
+      "id": "fixture-000625",
+      "subject": "Consulta sobre horario",
+      "sender": "anon-fixture-05",
+      "received": "2026-01-27T01:00:00+00:00",
+      "modified": "fixture-v1"
+    },
+    {
+      "id": "fixture-000626",
+      "subject": "Reclamo por demora",
+      "sender": "anon-fixture-06",
+      "received": "2026-01-27T02:00:00+00:00",
+      "modified": "fixture-v1"
+    },
+    {
+      "id": "fixture-000627",
+      "subject": "URGENTE: solicitud crítica",
+      "sender": "anon-fixture-07",
+      "received": "2026-01-27T03:00:00+00:00",
+      "modified": "fixture-v1"
+    },
+    {
+      "id": "fixture-000628",
+      "subject": "Información de servicio",
+      "sender": "anon-fixture-08",
+      "received": "2026-01-27T04:00:00+00:00",
+      "modified": "fixture-v1"
+    },
+    {
+      "id": "fixture-000629",
+      "subject": "",
+      "sender": "anon-fixture-09",
+      "received": "2026-01-27T05:00:00+00:00",
+      "modified": "fixture-v1"
+    },
+    {
+      "id": "fixture-000630",
+      "subject": "=1+1",
+      "sender": "anon-fixture-10",
+      "received": "2026-01-27T06:00:00+00:00",
+      "modified": "fixture-v1"
+    },
+    {
+      "id": "fixture-000631",
+      "subject": "consulta y reclamo",
+      "sender": "anon-fixture-11",
+      "received": "2026-01-27T07:00:00+00:00",
+      "modified": "fixture-v1"
+    },
+    {
+      "id": "fixture-000632",
+      "subject": "Solicitud de certificado",
+      "sender": "anon-fixture-12",
+      "received": "2026-01-27T08:00:00+00:00",
+      "modified": "fixture-v1"
+    },
+    {
+      "id": "fixture-000633",
+      "subject": "Consulta sobre horario",
+      "sender": "anon-fixture-13",
+      "received": "2026-01-27T09:00:00+00:00",
+      "modified": "fixture-v1"
+    },
+    {
+      "id": "fixture-000634",
+      "subject": "Reclamo por demora",
+      "sender": "anon-fixture-14",
+      "received": "2026-01-27T10:00:00+00:00",
+      "modified": "fixture-v1"
+    },
+    {
+      "id": "fixture-000635",
+      "subject": "URGENTE: solicitud crítica",
+      "sender": "anon-fixture-15",
+      "received": "2026-01-27T11:00:00+00:00",
+      "modified": "fixture-v1"
+    },
+    {
+      "id": "fixture-000636",
+      "subject": "Información de servicio",
+      "sender": "anon-fixture-16",
+      "received": "2026-01-27T12:00:00+00:00",
+      "modified": "fixture-v1"
+    },
+    {
+      "id": "fixture-000637",
+      "subject": "",
+      "sender": "anon-fixture-17",
+      "received": "2026-01-27T13:00:00+00:00",
+      "modified": "fixture-v1"
+    },
+    {
+      "id": "fixture-000638",
+      "subject": "=1+1",
+      "sender": "anon-fixture-18",
+      "received": "2026-01-27T14:00:00+00:00",
+      "modified": "fixture-v1"
+    },
+    {
+      "id": "fixture-000639",
+      "subject": "consulta y reclamo",
+      "sender": "anon-fixture-19",
+      "received": "2026-01-27T15:00:00+00:00",
+      "modified": "fixture-v1"
+    },
+    {
+      "id": "fixture-000640",
+      "subject": "Solicitud de certificado",
+      "sender": "anon-fixture-20",
+      "received": "2026-01-27T16:00:00+00:00",
+      "modified": "fixture-v1"
+    },
+    {
+      "id": "fixture-000641",
+      "subject": "Consulta sobre horario",
+      "sender": "anon-fixture-21",
+      "received": "2026-01-27T17:00:00+00:00",
+      "modified": "fixture-v1"
+    },
+    {
+      "id": "fixture-000642",
+      "subject": "Reclamo por demora",
+      "sender": "anon-fixture-22",
+      "received": "2026-01-27T18:00:00+00:00",
+      "modified": "fixture-v1"
+    },
+    {
+      "id": "fixture-000643",
+      "subject": "URGENTE: solicitud crítica",
+      "sender": "anon-fixture-23",
+      "received": "2026-01-27T19:00:00+00:00",
+      "modified": "fixture-v1"
+    },
+    {
+      "id": "fixture-000644",
+      "subject": "Información de servicio",
+      "sender": "anon-fixture-24",
+      "received": "2026-01-27T20:00:00+00:00",
+      "modified": "fixture-v1"
+    },
+    {
+      "id": "fixture-000645",
+      "subject": "",
+      "sender": "anon-fixture-25",
+      "received": "2026-01-27T21:00:00+00:00",
+      "modified": "fixture-v1"
+    },
+    {
+      "id": "fixture-000646",
+      "subject": "=1+1",
+      "sender": "anon-fixture-26",
+      "received": "2026-01-27T22:00:00+00:00",
+      "modified": "fixture-v1"
+    },
+    {
+      "id": "fixture-000647",
+      "subject": "consulta y reclamo",
+      "sender": "anon-fixture-27",
+      "received": "2026-01-27T23:00:00+00:00",
+      "modified": "fixture-v1"
+    },
+    {
+      "id": "fixture-000648",
+      "subject": "Solicitud de certificado",
+      "sender": "anon-fixture-28",
+      "received": "2026-01-28T00:00:00+00:00",
+      "modified": "fixture-v1"
+    },
+    {
+      "id": "fixture-000649",
+      "subject": "Consulta sobre horario",
+      "sender": "anon-fixture-29",
+      "received": "2026-01-28T01:00:00+00:00",
+      "modified": "fixture-v1"
+    },
+    {
+      "id": "fixture-000650",
+      "subject": "Reclamo por demora",
+      "sender": "anon-fixture-30",
+      "received": "2026-01-28T02:00:00+00:00",
+      "modified": "fixture-v1"
+    },
+    {
+      "id": "fixture-000651",
+      "subject": "URGENTE: solicitud crítica",
+      "sender": "anon-fixture-00",
+      "received": "2026-01-28T03:00:00+00:00",
+      "modified": "fixture-v1"
+    },
+    {
+      "id": "fixture-000652",
+      "subject": "Información de servicio",
+      "sender": "anon-fixture-01",
+      "received": "2026-01-28T04:00:00+00:00",
+      "modified": "fixture-v1"
+    },
+    {
+      "id": "fixture-000653",
+      "subject": "",
+      "sender": "anon-fixture-02",
+      "received": "2026-01-28T05:00:00+00:00",
+      "modified": "fixture-v1"
+    },
+    {
+      "id": "fixture-000654",
+      "subject": "=1+1",
+      "sender": "anon-fixture-03",
+      "received": "2026-01-28T06:00:00+00:00",
+      "modified": "fixture-v1"
+    },
+    {
+      "id": "fixture-000655",
+      "subject": "consulta y reclamo",
+      "sender": "anon-fixture-04",
+      "received": "2026-01-28T07:00:00+00:00",
+      "modified": "fixture-v1"
+    },
+    {
+      "id": "fixture-000656",
+      "subject": "Solicitud de certificado",
+      "sender": "anon-fixture-05",
+      "received": "2026-01-28T08:00:00+00:00",
+      "modified": "fixture-v1"
+    },
+    {
+      "id": "fixture-000657",
+      "subject": "Consulta sobre horario",
+      "sender": "anon-fixture-06",
+      "received": "2026-01-28T09:00:00+00:00",
+      "modified": "fixture-v1"
+    },
+    {
+      "id": "fixture-000658",
+      "subject": "Reclamo por demora",
+      "sender": "anon-fixture-07",
+      "received": "2026-01-28T10:00:00+00:00",
+      "modified": "fixture-v1"
+    },
+    {
+      "id": "fixture-000659",
+      "subject": "URGENTE: solicitud crítica",
+      "sender": "anon-fixture-08",
+      "received": "2026-01-28T11:00:00+00:00",
+      "modified": "fixture-v1"
+    },
+    {
+      "id": "fixture-000660",
+      "subject": "Información de servicio",
+      "sender": "anon-fixture-09",
+      "received": "2026-01-28T12:00:00+00:00",
+      "modified": "fixture-v1"
+    },
+    {
+      "id": "fixture-000661",
+      "subject": "",
+      "sender": "anon-fixture-10",
+      "received": "2026-01-28T13:00:00+00:00",
+      "modified": "fixture-v1"
+    },
+    {
+      "id": "fixture-000662",
+      "subject": "=1+1",
+      "sender": "anon-fixture-11",
+      "received": "2026-01-28T14:00:00+00:00",
+      "modified": "fixture-v1"
+    },
+    {
+      "id": "fixture-000663",
+      "subject": "consulta y reclamo",
+      "sender": "anon-fixture-12",
+      "received": "2026-01-28T15:00:00+00:00",
+      "modified": "fixture-v1"
+    },
+    {
+      "id": "fixture-000664",
+      "subject": "Solicitud de certificado",
+      "sender": "anon-fixture-13",
+      "received": "2026-01-28T16:00:00+00:00",
+      "modified": "fixture-v1"
+    },
+    {
+      "id": "fixture-000665",
+      "subject": "Consulta sobre horario",
+      "sender": "anon-fixture-14",
+      "received": "2026-01-28T17:00:00+00:00",
+      "modified": "fixture-v1"
+    },
+    {
+      "id": "fixture-000666",
+      "subject": "Reclamo por demora",
+      "sender": "anon-fixture-15",
+      "received": "2026-01-28T18:00:00+00:00",
+      "modified": "fixture-v1"
+    },
+    {
+      "id": "fixture-000667",
+      "subject": "URGENTE: solicitud crítica",
+      "sender": "anon-fixture-16",
+      "received": "2026-01-28T19:00:00+00:00",
+      "modified": "fixture-v1"
+    },
+    {
+      "id": "fixture-000668",
+      "subject": "Información de servicio",
+      "sender": "anon-fixture-17",
+      "received": "2026-01-28T20:00:00+00:00",
+      "modified": "fixture-v1"
+    },
+    {
+      "id": "fixture-000669",
+      "subject": "",
+      "sender": "anon-fixture-18",
+      "received": "2026-01-28T21:00:00+00:00",
+      "modified": "fixture-v1"
+    },
+    {
+      "id": "fixture-000670",
+      "subject": "=1+1",
+      "sender": "anon-fixture-19",
+      "received": "2026-01-28T22:00:00+00:00",
+      "modified": "fixture-v1"
+    },
+    {
+      "id": "fixture-000671",
+      "subject": "consulta y reclamo",
+      "sender": "anon-fixture-20",
+      "received": "2026-01-28T23:00:00+00:00",
+      "modified": "fixture-v1"
+    },
+    {
+      "id": "fixture-000672",
+      "subject": "Solicitud de certificado",
+      "sender": "anon-fixture-21",
+      "received": "2026-01-29T00:00:00+00:00",
+      "modified": "fixture-v1"
+    },
+    {
+      "id": "fixture-000673",
+      "subject": "Consulta sobre horario",
+      "sender": "anon-fixture-22",
+      "received": "2026-01-29T01:00:00+00:00",
+      "modified": "fixture-v1"
+    },
+    {
+      "id": "fixture-000674",
+      "subject": "Reclamo por demora",
+      "sender": "anon-fixture-23",
+      "received": "2026-01-29T02:00:00+00:00",
+      "modified": "fixture-v1"
+    },
+    {
+      "id": "fixture-000675",
+      "subject": "URGENTE: solicitud crítica",
+      "sender": "anon-fixture-24",
+      "received": "2026-01-29T03:00:00+00:00",
+      "modified": "fixture-v1"
+    },
+    {
+      "id": "fixture-000676",
+      "subject": "Información de servicio",
+      "sender": "anon-fixture-25",
+      "received": "2026-01-29T04:00:00+00:00",
+      "modified": "fixture-v1"
+    },
+    {
+      "id": "fixture-000677",
+      "subject": "",
+      "sender": "anon-fixture-26",
+      "received": "2026-01-29T05:00:00+00:00",
+      "modified": "fixture-v1"
+    },
+    {
+      "id": "fixture-000678",
+      "subject": "=1+1",
+      "sender": "anon-fixture-27",
+      "received": "2026-01-29T06:00:00+00:00",
+      "modified": "fixture-v1"
+    },
+    {
+      "id": "fixture-000679",
+      "subject": "consulta y reclamo",
+      "sender": "anon-fixture-28",
+      "received": "2026-01-29T07:00:00+00:00",
+      "modified": "fixture-v1"
+    },
+    {
+      "id": "fixture-000680",
+      "subject": "Solicitud de certificado",
+      "sender": "anon-fixture-29",
+      "received": "2026-01-29T08:00:00+00:00",
+      "modified": "fixture-v1"
+    },
+    {
+      "id": "fixture-000681",
+      "subject": "Consulta sobre horario",
+      "sender": "anon-fixture-30",
+      "received": "2026-01-29T09:00:00+00:00",
+      "modified": "fixture-v1"
+    },
+    {
+      "id": "fixture-000682",
+      "subject": "Reclamo por demora",
+      "sender": "anon-fixture-00",
+      "received": "2026-01-29T10:00:00+00:00",
+      "modified": "fixture-v1"
+    },
+    {
+      "id": "fixture-000683",
+      "subject": "URGENTE: solicitud crítica",
+      "sender": "anon-fixture-01",
+      "received": "2026-01-29T11:00:00+00:00",
+      "modified": "fixture-v1"
+    },
+    {
+      "id": "fixture-000684",
+      "subject": "Información de servicio",
+      "sender": "anon-fixture-02",
+      "received": "2026-01-29T12:00:00+00:00",
+      "modified": "fixture-v1"
+    },
+    {
+      "id": "fixture-000685",
+      "subject": "",
+      "sender": "anon-fixture-03",
+      "received": "2026-01-29T13:00:00+00:00",
+      "modified": "fixture-v1"
+    },
+    {
+      "id": "fixture-000686",
+      "subject": "=1+1",
+      "sender": "anon-fixture-04",
+      "received": "2026-01-29T14:00:00+00:00",
+      "modified": "fixture-v1"
+    },
+    {
+      "id": "fixture-000687",
+      "subject": "consulta y reclamo",
+      "sender": "anon-fixture-05",
+      "received": "2026-01-29T15:00:00+00:00",
+      "modified": "fixture-v1"
+    },
+    {
+      "id": "fixture-000688",
+      "subject": "Solicitud de certificado",
+      "sender": "anon-fixture-06",
+      "received": "2026-01-29T16:00:00+00:00",
+      "modified": "fixture-v1"
+    },
+    {
+      "id": "fixture-000689",
+      "subject": "Consulta sobre horario",
+      "sender": "anon-fixture-07",
+      "received": "2026-01-29T17:00:00+00:00",
+      "modified": "fixture-v1"
+    },
+    {
+      "id": "fixture-000690",
+      "subject": "Reclamo por demora",
+      "sender": "anon-fixture-08",
+      "received": "2026-01-29T18:00:00+00:00",
+      "modified": "fixture-v1"
+    },
+    {
+      "id": "fixture-000691",
+      "subject": "URGENTE: solicitud crítica",
+      "sender": "anon-fixture-09",
+      "received": "2026-01-29T19:00:00+00:00",
+      "modified": "fixture-v1"
+    },
+    {
+      "id": "fixture-000692",
+      "subject": "Información de servicio",
+      "sender": "anon-fixture-10",
+      "received": "2026-01-29T20:00:00+00:00",
+      "modified": "fixture-v1"
+    },
+    {
+      "id": "fixture-000693",
+      "subject": "",
+      "sender": "anon-fixture-11",
+      "received": "2026-01-29T21:00:00+00:00",
+      "modified": "fixture-v1"
+    },
+    {
+      "id": "fixture-000694",
+      "subject": "=1+1",
+      "sender": "anon-fixture-12",
+      "received": "2026-01-29T22:00:00+00:00",
+      "modified": "fixture-v1"
+    },
+    {
+      "id": "fixture-000695",
+      "subject": "consulta y reclamo",
+      "sender": "anon-fixture-13",
+      "received": "2026-01-29T23:00:00+00:00",
+      "modified": "fixture-v1"
+    },
+    {
+      "id": "fixture-000696",
+      "subject": "Solicitud de certificado",
+      "sender": "anon-fixture-14",
+      "received": "2026-01-30T00:00:00+00:00",
+      "modified": "fixture-v1"
+    },
+    {
+      "id": "fixture-000697",
+      "subject": "Consulta sobre horario",
+      "sender": "anon-fixture-15",
+      "received": "2026-01-30T01:00:00+00:00",
+      "modified": "fixture-v1"
+    },
+    {
+      "id": "fixture-000698",
+      "subject": "Reclamo por demora",
+      "sender": "anon-fixture-16",
+      "received": "2026-01-30T02:00:00+00:00",
+      "modified": "fixture-v1"
+    },
+    {
+      "id": "fixture-000699",
+      "subject": "URGENTE: solicitud crítica",
+      "sender": "anon-fixture-17",
+      "received": "2026-01-30T03:00:00+00:00",
+      "modified": "fixture-v1"
+    }
+  ],
+  "cursor": "fixture:700",
+  "phase": "NEXT"
+}

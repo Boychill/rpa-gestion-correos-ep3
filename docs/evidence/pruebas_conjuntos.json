@@ -1,0 +1,88 @@
+{
+  "checked_at": "2026-11-20T06:23:16.248190+00:00",
+  "source": "FIXTURE",
+  "mail_sent": false,
+  "groups": [
+    {
+      "count": 100,
+      "status": "PASSED",
+      "classified": 100,
+      "categories": {
+        "Solicitud": 13,
+        "Consulta": 13,
+        "Reclamo": 25,
+        "Urgente": 13,
+        "Información": 12,
+        "Otros": 24
+      },
+      "repeat_status": "NO_CHANGES",
+      "duplicate_records": 0,
+      "mail_sent": false,
+      "duration_seconds": 2.277,
+      "report": "output/presentacion/a7f5eb7cfedf442a89b212fc6c8ab5e2/4ed3025e-c35e-420f-840f-468d364a4dc4/reporte.xlsx",
+      "sha256": "68eaeab8b33b0a776a96d98265a19ae0102a3da2dae68574a7a392100cce3e0c",
+      "logs_verified": true
+    },
+    {
+      "count": 300,
+      "status": "PASSED",
+      "classified": 300,
+      "categories": {
+        "Solicitud": 38,
+        "Consulta": 38,
+        "Reclamo": 75,
+        "Urgente": 38,
+        "Información": 37,
+        "Otros": 74
+      },
+      "repeat_status": "NO_CHANGES",
+      "duplicate_records": 0,
+      "mail_sent": false,
+      "duration_seconds": 2.629,
+      "report": "output/presentacion/bc98d6b529f34bc0994a9da9ca5a0c14/a4479c07-358a-4499-9bb2-c322b28b848b/reporte.xlsx",
+      "sha256": "3ee5c443107b5258ca5c3bb242f26df9ce90dcc699f28171f0be6c33b461506b",
+      "logs_verified": true
+    },
+    {
+      "count": 500,
+      "status": "PASSED",
+      "classified": 500,
+      "categories": {
+        "Solicitud": 63,
+        "Consulta": 63,
+        "Reclamo": 125,
+        "Urgente": 63,
+        "Información": 62,
+        "Otros": 124
+      },
+      "repeat_status": "NO_CHANGES",
+      "duplicate_records": 0,
+      "mail_sent": false,
+      "duration_seconds": 3.092,
+      "report": "output/presentacion/934b8e086246485398d446fc913c226e/b08da1b7-61b6-4184-8c6b-e92cc861bc6a/reporte.xlsx",
+      "sha256": "4c530216d70ab00769bb99b14c437f5e3e9812b3663b6503b7ba2c617a56c352",
+      "logs_verified": true
+    },
+    {
+      "count": 1000,
+      "status": "PASSED",
+      "classified": 1000,
+      "categories": {
+        "Solicitud": 125,
+        "Consulta": 125,
+        "Reclamo": 250,
+        "Urgente": 125,
+        "Información": 125,
+        "Otros": 250
+      },
+      "repeat_status": "NO_CHANGES",
+      "duplicate_records": 0,
+      "mail_sent": false,
+      "duration_seconds": 4.531,
+      "report": "output/presentacion/0c6f93e62ac5497c83745e691bd4d8f4/073606b2-66a5-4ec5-a197-02478ab152b1/reporte.xlsx",
+      "sha256": "4759bc14c9e2e7fded7bd2e348b283cb33e2a57eb42c2da2fe2ed73cdaa3a1e1",
+      "logs_verified": true
+    }
+  ],
+  "status": "PASSED"
+}

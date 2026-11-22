@@ -1,0 +1,15 @@
+.venv/
+.env
+__pycache__/
+.pytest_cache/
+runtime/
+output/
+dist/
+logs/
+*.pyc
+client_secret_*.json
+credentials.json
+config/google/
+config/*credentials*.json*
+**/token*.json
+**/*oauth*.bin

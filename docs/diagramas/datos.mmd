@@ -1,0 +1,65 @@
+erDiagram
+  executions ||--o{ events : registra
+  events ||--o| event_context : detalla
+  executions ||--o{ run_messages : contiene
+  executions ||--o| sends : prepara
+  executions ||--o{ operations : limita
+  messages ||--o{ run_messages : snapshot_logico
+  checkpoints {
+    text scope PK
+    text cursor
+    text phase
+  }
+  executions {
+    text id PK
+    text profile
+    text signature
+    text status
+    text metrics
+  }
+  messages {
+    text mailbox PK
+    text id PK
+    text fingerprint
+    text state
+    int attempts
+  }
+  run_messages {
+    text execution_id PK,FK
+    text mailbox PK
+    text message_id PK
+    text snapshot
+  }
+  events {
+    int id PK
+    text execution_id FK
+    text step_id
+    text level
+    text code
+  }
+  sends {
+    text execution_id PK,FK
+    text state
+    text sha256
+    int size
+  }
+  operations {
+    text execution_id PK,FK
+    text op PK
+    int attempts
+  }
+  cleanups {
+    text id PK
+    text manifest
+    text archive_hash
+    text state
+  }
+  event_context {
+    int event_id PK,FK
+    text dataset
+    text job_id
+    text role
+    int http_status
+    float wait_ms
+    text recovery
+  }

@@ -1,0 +1,74 @@
+{
+  "requested": 1000,
+  "sender": "javiermontupilca@gmail.com",
+  "recipient": "correopruebaslocasprogra@gmail.com",
+  "campaigns": [
+    {
+      "campaign_id": "7c7558e6-22bf-4c81-9c20-500f1510b38b",
+      "count": 500,
+      "tag": "RPA-TEST-7c7558e6-22bf-4c81-9c20-500f1510b38b",
+      "result": {
+        "campaign_id": "7c7558e6-22bf-4c81-9c20-500f1510b38b",
+        "expected": 500,
+        "states": {
+          "PENDING": 161,
+          "RECEIVED": 338,
+          "UNCERTAIN": 1
+        },
+        "accepted": 338,
+        "received": 338,
+        "all_accepted": false
+      }
+    },
+    {
+      "campaign_id": "9ca785bb-b755-49c3-920e-5e0684a84bf0",
+      "count": 500,
+      "tag": "RPA-TEST-9ca785bb-b755-49c3-920e-5e0684a84bf0",
+      "result": {
+        "campaign_id": "9ca785bb-b755-49c3-920e-5e0684a84bf0",
+        "expected": 500,
+        "states": {
+          "PENDING": 500
+        },
+        "accepted": 0,
+        "received": 0,
+        "all_accepted": false
+      }
+    }
+  ],
+  "first_invocation_limit": 494,
+  "continuation": "Review the uncertain delivery before resuming; keep accepted deliveries and respect the account daily quota. No automatic future send is scheduled.",
+  "checked_at": "2026-11-20T11:07:29.338011+00:00",
+  "status": "REVIEW_REQUIRED",
+  "accepted": 338,
+  "received": 338,
+  "pending": 661,
+  "uncertain": 1,
+  "classified_correctly": 338,
+  "duplicates": 0,
+  "folders": {
+    "inbox": {
+      "status": 200,
+      "count": 282,
+      "has_more": false
+    },
+    "spam": {
+      "status": 200,
+      "count": 56,
+      "has_more": false
+    },
+    "trash": {
+      "status": 200,
+      "count": 0,
+      "has_more": false
+    },
+    "checked_at": "2026-11-20T11:04:48.309499+00:00"
+  },
+  "report": {
+    "path": "output\\f861b22f-c98c-4c4a-b909-bec13dae6e2f\\reporte.xlsx",
+    "sha256": "c36c859b62d7ec6f016e1e828a86a6440ba3e1ca72c1dbda657c30e5114758e8",
+    "size": 26666
+  },
+  "send_error": "SEND_UNKNOWN",
+  "analysis_error": null
+}

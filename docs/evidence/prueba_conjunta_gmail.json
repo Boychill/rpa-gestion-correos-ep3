@@ -1,0 +1,48 @@
+{
+  "checked_at": "2026-11-20T06:24:37.963481+00:00",
+  "mail_sent": false,
+  "source": "GMAIL_REAL",
+  "complete": true,
+  "received": 500,
+  "correct": 500,
+  "duplicates": 0,
+  "missing": 0,
+  "execution_status": "NO_CHANGES",
+  "report": {
+    "execution_id": "63fd45e6-4b0b-547d-864d-1f3e66992273",
+    "path": "output/63fd45e6-4b0b-547d-864d-1f3e66992273/reporte.xlsx",
+    "count": 500,
+    "reused": true,
+    "sha256": "f0830c1da0548c45c9102a521b81fb8185a6af75017d37677adfb41fdb5f1f32",
+    "size": 34304
+  },
+  "logs": {
+    "file": {
+      "name": "local-fbd6c16f-ff76-4add-9204-f2866977f1b1.log",
+      "folder": "runtime/logs/descargas",
+      "sha256": "72e507ac43978914dd0927a4450453f6266f279f2a12d69ebd67d7e9adfa1736",
+      "records": 6,
+      "created": "2026-11-20T06:24:35.396100+00:00",
+      "expires": "2026-12-05T06:24:35.396130+00:00",
+      "download": "/api/logs/files/local-fbd6c16f-ff76-4add-9204-f2866977f1b1.log"
+    },
+    "supabase": {
+      "enabled": true,
+      "configured": true,
+      "counts": {
+        "SYNCED": 1422
+      },
+      "max_attempts": 3,
+      "download_days": 15,
+      "auto_clean_logs": true,
+      "requests": 1,
+      "synced": 6,
+      "status": "SYNCED"
+    },
+    "retention": {
+      "enabled": true,
+      "deleted": [],
+      "skipped": []
+    }
+  }
+}
