@@ -41,6 +41,52 @@ def friendly_error(code):
     return ERRORS.get(code, 'La tarea se detuvo. Consulta los logs. Código: '+code)
 
 
+class ScrollablePage(ttk.Frame):
+    """Contenido accesible aunque la pestaña sea más pequeña que sus controles."""
+    def __init__(self,parent):
+        super().__init__(parent)
+        self.rowconfigure(0,weight=1);self.columnconfigure(0,weight=1)
+        self.canvas=tk.Canvas(self,highlightthickness=0,width=1,height=1)
+        self.canvas.grid(row=0,column=0,sticky='nsew')
+        vertical=ttk.Scrollbar(self,orient='vertical',command=self.canvas.yview)
+        vertical.grid(row=0,column=1,sticky='ns')
+        horizontal=ttk.Scrollbar(self,orient='horizontal',command=self.canvas.xview)
+        horizontal.grid(row=1,column=0,sticky='ew')
+        self.canvas.configure(yscrollcommand=vertical.set,xscrollcommand=horizontal.set)
+        self.body=ttk.Frame(self.canvas,padding=10)
+        self.item=self.canvas.create_window((0,0),window=self.body,anchor='nw')
+        self.body.bind('<Configure>',self.resize)
+        self.canvas.bind('<Configure>',self.resize)
+
+    def resize(self,event=None):
+        width=max(self.canvas.winfo_width(),self.body.winfo_reqwidth())
+        height=max(self.canvas.winfo_height(),self.body.winfo_reqheight())
+        self.canvas.itemconfigure(self.item,width=width,height=height)
+        self.canvas.configure(scrollregion=self.canvas.bbox('all'))
+
+
+class ActionBar(ttk.Frame):
+    """Redistribuye botones sin esconder los que no caben en una sola fila."""
+    def __init__(self,parent):
+        super().__init__(parent)
+        self.buttons=[];self.columns=0
+        self.bind('<Configure>',self.reflow)
+
+    def add(self,button):
+        self.buttons.append(button)
+        self.columns=0
+        self.reflow()
+
+    def reflow(self,event=None):
+        if not self.buttons:return
+        needed=max(button.winfo_reqwidth() for button in self.buttons)+8
+        columns=max(1,min(len(self.buttons),self.winfo_width()//needed))
+        if columns==self.columns:return
+        self.columns=columns
+        for i,button in enumerate(self.buttons):
+            button.grid(row=i//columns,column=i%columns,sticky='w',padx=(0,6),pady=3)
+
+
 class DemoWindow:
     def __init__(self, window, settings):
         self.window,self.s,self.actions=window,settings,DemoActions(settings)
@@ -53,36 +99,52 @@ class DemoWindow:
         self.live_received=0
         window.title('RPA EP3 · Presentación y pruebas')
         width,height=min(1160,window.winfo_screenwidth()-40),min(900,window.winfo_screenheight()-90)
-        window.geometry(f'{width}x{height}');window.minsize(min(980,width),min(600,height))
+        window.geometry(f'{width}x{height}');window.minsize(min(680,width),min(550,height))
         style=ttk.Style(window);style.theme_use('clam')
         style.configure('Title.TLabel',font=('Segoe UI',20,'bold'))
         style.configure('Count.TLabel',font=('Segoe UI',15,'bold'));style.configure('TButton',padding=6)
-        root=ttk.Frame(window,padding=14);root.pack(fill='both',expand=True)
-        header=ttk.Frame(root);header.pack(fill='x')
-        ttk.Label(header,text='Gestión y pruebas de correos',style='Title.TLabel').pack(side='left')
-        ttk.Button(header,text='Modo PRESENTACIÓN',command=self.toggle_presentation).pack(side='right')
+        self.root=root=ttk.Frame(window,padding=10);root.pack(fill='both',expand=True)
+        root.columnconfigure(0,weight=1);root.rowconfigure(3,weight=1)
+        header=ttk.Frame(root);header.grid(row=0,column=0,sticky='ew')
+        header.columnconfigure(0,weight=1)
+        self.title_label=ttk.Label(header,text='Gestión y pruebas de correos',style='Title.TLabel')
+        self.title_label.grid(row=0,column=0,sticky='w')
+        ttk.Button(header,text='Modo PRESENTACIÓN',command=self.toggle_presentation).grid(row=0,column=1,sticky='e')
         self.selected=tk.StringVar(value='Campaña: ninguna');self.stage=tk.StringVar(value='Selecciona una operación')
         self.status=tk.StringVar(value='Lista. Preparar y simular no envían correos.')
         self.counters=tk.StringVar(value='Preparados: 0   Aceptados: 0   Recibidos: 0   Clasificados: 0')
         self.special_counts=tk.StringVar(value='Especiales: 0   Comprobados: 0   Pendientes: 0')
+        summary_box=ttk.Frame(root);summary_box.grid(row=1,column=0,sticky='ew')
+        self.summary_labels=[]
         for var,style_name in [(self.selected,'TLabel'),(self.counters,'Count.TLabel'),(self.special_counts,'TLabel'),(self.stage,'TLabel')]:
-            ttk.Label(root,textvariable=var,style=style_name,wraplength=1100).pack(anchor='w',pady=3)
-        self.progress=ttk.Progressbar(root,maximum=100);self.progress.pack(fill='x',pady=4)
-        self.tabs=ttk.Notebook(root);self.tabs.pack(fill='both',expand=True,pady=6)
-        self.pages=[]
-        for title in ('1 Inicio','2 Simulación y cantidades','3 Preparar Gmail','4 Envío','5 Recepción','6 Excel e historial','7 Auditoría'):
-            frame=ttk.Frame(self.tabs,padding=12);self.tabs.add(frame,text=title);self.pages.append(frame)
+            label=ttk.Label(summary_box,textvariable=var,style=style_name,wraplength=width-30)
+            label.pack(anchor='w',pady=1);self.summary_labels.append(label)
+        self.progress=ttk.Progressbar(root,maximum=100);self.progress.grid(row=2,column=0,sticky='ew',pady=4)
+        self.tabs=ttk.Notebook(root);self.tabs.grid(row=3,column=0,sticky='nsew',pady=4)
+        self.pages=[];self.tab_containers=[]
+        for index,title in enumerate(('1 Inicio','2 Simulación','3 Campañas','4 Envío','5 Recepción','6 Reportes','7 Auditoría')):
+            if index in (0,1):
+                frame=ttk.Frame(self.tabs,padding=8);body=frame
+            else:
+                frame=ScrollablePage(self.tabs);body=frame.body
+            self.tabs.add(frame,text=title);self.pages.append(body);self.tab_containers.append(frame)
         self.build_sections()
-        self.details=tk.Text(root,height=7,wrap='word',font=('Consolas',10));self.details.pack(fill='x',pady=6)
-        footer=ttk.Frame(root);footer.pack(fill='x')
+        self.details_frame=ttk.Frame(root,height=80)
+        self.details_frame.grid(row=4,column=0,sticky='nsew',pady=4);self.details_frame.grid_propagate(False)
+        self.details_frame.rowconfigure(0,weight=1);self.details_frame.columnconfigure(0,weight=1)
+        self.details=tk.Text(self.details_frame,height=1,width=1,wrap='word',font=('Consolas',10))
+        self.details.grid(row=0,column=0,sticky='nsew')
+        details_scroll=ttk.Scrollbar(self.details_frame,command=self.details.yview)
+        details_scroll.grid(row=0,column=1,sticky='ns');self.details.configure(yscrollcommand=details_scroll.set)
+        self.footer=footer=ActionBar(root);footer.grid(row=5,column=0,sticky='ew')
         for text,cmd in [('Abrir Excel',self.open_report),('Consultar logs',lambda:self.open_path(self.logs_path)),
                          ('Estado de Supabase',self.check_connections),('Resultados anteriores',self.show_history)]:
-            ttk.Button(footer,text=text,command=cmd).pack(side='left',padx=3)
-        self.stop_button=ttk.Button(footer,text='Detener nuevos envíos',command=self.stop.set,state='disabled');self.stop_button.pack(side='left',padx=3)
-        status_label=ttk.Label(root,textvariable=self.status,wraplength=width-30)
-        status_label.pack(side='bottom',fill='x',pady=5,before=self.tabs)
-        footer.pack_forget();footer.pack(side='bottom',fill='x',before=self.tabs)
-        self.details.pack_forget();self.details.pack(side='bottom',fill='x',pady=6,before=self.tabs)
+            footer.add(ttk.Button(footer,text=text,command=cmd))
+        self.stop_button=ttk.Button(footer,text='Detener nuevos envíos',command=self.stop.set,state='disabled');footer.add(self.stop_button)
+        status_box=ttk.Frame(root,height=36);status_box.grid(row=6,column=0,sticky='ew');status_box.pack_propagate(False)
+        self.status_label=ttk.Label(status_box,textvariable=self.status,wraplength=width-30,anchor='nw')
+        self.status_label.pack(fill='both',expand=True)
+        self.last_width=None;root.bind('<Configure>',self.resize_labels)
         self.apply_config(preset('real'));self.preset_choice.set(list(PRESETS)[1])
         self.refresh_saved();self.refresh_campaigns();self.refresh_history()
         window.protocol('WM_DELETE_WINDOW',self.close);self.after_id=window.after(200,self.tick)
@@ -99,14 +161,24 @@ class DemoWindow:
         widget=ttk.Combobox(parent,state='readonly',values=values,width=width,textvariable=variable)
         self.inputs.append((widget,'readonly'));return widget
 
+    def resize_labels(self,event):
+        if event.widget is not self.root or event.width==self.last_width:return
+        self.last_width=event.width
+        for label in self.summary_labels:label.configure(wraplength=max(200,event.width-24))
+        self.status_label.configure(wraplength=max(200,event.width-24))
+        self.title_label.configure(wraplength=max(200,event.width-210))
+
     def build_sections(self):
         page=self.pages[0]
-        ttk.Label(page,text='Remitente: '+(self.s.gmail_sender_address or 'Sin configurar')+'\nReceptor: '+(self.s.gmail_receiver_address or 'Sin configurar')).pack(anchor='w')
-        self.connection_text=tk.StringVar(value='Estado no consultado. La revisión local no modifica tokens ni consulta servicios.')
-        ttk.Label(page,textvariable=self.connection_text,wraplength=1050).pack(anchor='w',pady=12)
+        self.home_actions=ActionBar(page);self.home_actions.pack(fill='x',pady=(0,4))
         for text,cmd in [('Revisar estado local',self.check_connections),('Autorizar remitente',lambda:self.authorize('remitente')),('Autorizar receptor',lambda:self.authorize('receptor'))]:
-            self.button(page,text,cmd).pack(anchor='w',pady=4)
-        ttk.Label(page,text='El estado local no demuestra disponibilidad remota. Autorizar abre Google.').pack(anchor='w',pady=8)
+            self.home_actions.add(self.button(self.home_actions,text,cmd))
+        self.connection_text=tk.StringVar(value='Estado no consultado. La revisión local no modifica tokens ni consulta servicios.')
+        box=ttk.Frame(page);box.pack(fill='both',expand=True)
+        self.connection_view=tk.Text(box,height=1,width=1,wrap='word',font=('Segoe UI',10),state='disabled')
+        scroll=ttk.Scrollbar(box,command=self.connection_view.yview);scroll.pack(side='right',fill='y')
+        self.connection_view.configure(yscrollcommand=scroll.set);self.connection_view.pack(fill='both',expand=True)
+        self.connection_text.trace_add('write',self.update_connection_text);self.update_connection_text()
         self.build_configuration()
         page=self.pages[2]
         ttk.Label(page,text='Usa la configuración de la sección 2 en modalidad GMAIL. Máximo: 500 por campaña.').pack(anchor='w')
@@ -147,17 +219,20 @@ class DemoWindow:
         self.button(page,'Estado local de Supabase',self.check_connections).pack(anchor='w',pady=4)
         self.button(page,'Sincronizar logs con Supabase (usa internet)',lambda:self.start('Sincronizando logs',self.actions.sync_logs)).pack(anchor='w',pady=4)
 
+    def update_connection_text(self,*args):
+        self.connection_view.configure(state='normal')
+        self.connection_view.delete('1.0','end')
+        self.connection_view.insert('end','Remitente: '+(self.s.gmail_sender_address or 'Sin configurar')+
+            '\nReceptor: '+(self.s.gmail_receiver_address or 'Sin configurar')+'\n\n'+self.connection_text.get())
+        self.connection_view.configure(state='disabled')
+
     def build_configuration(self):
         page=self.pages[1]
-        actions=ttk.Frame(page);actions.pack(side='bottom',fill='x',pady=4)
-        self.button(actions,'Validar cantidades',self.validate_form).pack(side='left')
-        self.button(actions,'Ejecutar simulación sin internet',self.simulate).pack(side='left',padx=8)
-        ttk.Label(actions,text='Desplaza el formulario para ver todos los escenarios.').pack(side='left')
-        canvas=tk.Canvas(page,highlightthickness=0)
-        scroll=ttk.Scrollbar(page,orient='vertical',command=canvas.yview);scroll.pack(side='right',fill='y')
-        canvas.pack(side='left',fill='both',expand=True);canvas.configure(yscrollcommand=scroll.set)
-        form=ttk.Frame(canvas);canvas.create_window((0,0),window=form,anchor='nw')
-        form.bind('<Configure>',lambda event:canvas.configure(scrollregion=canvas.bbox('all')))
+        self.configuration_actions=actions=ActionBar(page);actions.pack(side='bottom',fill='x',pady=4)
+        actions.add(self.button(actions,'Validar cantidades',self.validate_form))
+        actions.add(self.button(actions,'Ejecutar simulación sin internet',self.simulate))
+        self.configuration_scroll=ScrollablePage(page);self.configuration_scroll.pack(fill='both',expand=True)
+        form=self.configuration_scroll.body
         self.preset_choice=tk.StringVar();self.mode=tk.StringVar(value='GMAIL')
         self.combo(form,list(PRESETS),43,self.preset_choice).grid(row=0,column=0,columnspan=2,sticky='w',pady=5)
         self.button(form,'Aplicar preset (reemplaza cantidades)',self.apply_preset).grid(row=0,column=2,columnspan=2)
@@ -250,7 +325,7 @@ class DemoWindow:
         data=load(self.s,self.campaign_id);self.preview_tree.delete(*self.preview_tree.get_children())
         for item in data['messages']:
             self.preview_tree.insert('','end',values=(item['sequence'],item.get('scenario',{}).get('type','normal'),item['expected'],item['subject']))
-        self.tabs.select(self.pages[2])
+        self.tabs.select(self.tab_containers[2])
 
     def emit(self,event):self.messages.put(('progress',event))
 
@@ -409,12 +484,14 @@ class DemoWindow:
 
     def show_history(self):
         if self.presentation:self.toggle_presentation()
-        self.tabs.select(self.pages[5])
+        self.tabs.select(self.tab_containers[5])
 
     def toggle_presentation(self):
         self.presentation=not self.presentation
-        if self.presentation:self.tabs.pack_forget();self.details.configure(height=16)
-        else:self.tabs.pack(fill='both',expand=True,pady=6);self.details.configure(height=7)
+        if self.presentation:
+            self.tabs.grid_remove();self.root.rowconfigure(3,weight=0);self.root.rowconfigure(4,weight=1)
+        else:
+            self.root.rowconfigure(4,weight=0);self.root.rowconfigure(3,weight=1);self.tabs.grid()
 
     def open_results(self):self.open_path(Path(self.report_path).parent if self.report_path else self.s.output)
 

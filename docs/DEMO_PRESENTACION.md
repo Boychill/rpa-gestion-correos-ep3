@@ -15,14 +15,16 @@ La política Bypass solo afecta ese proceso de instalación. También puedes usa
 
 ## Las siete secciones
 
+Los botones de Inicio permanecen sobre el estado de las conexiones. Los mensajes y los detalles tienen desplazamiento independiente; las acciones inferiores se distribuyen en varias filas si falta ancho. En las pestañas, usa las barras vertical y horizontal para acceder al contenido que no cabe. Después de actualizar el programa, cierra y vuelve a abrir `Abrir_Demo.cmd` para cargar la nueva interfaz.
+
 | Sección | Uso |
 | --- | --- |
 | Inicio | Cuentas configuradas, autorización local, estado de cola Supabase y estimación de envíos |
-| Simulación y cantidades | Presets, distribución exacta, semilla, guardado y simulación |
-| Preparar Gmail | Crear campaña sin enviar, seleccionar campañas anteriores y vista previa |
+| Simulación | Presets, distribución exacta, semilla, guardado y simulación |
+| Campañas | Crear campaña sin enviar, seleccionar campañas anteriores y vista previa |
 | Envío | Intervalo, máximo de intentos por tanda, confirmación y continuación |
 | Recepción | Leer sin enviar y comparar resultados esperados con obtenidos |
-| Excel e historial | Abrir reporte, CSV/JSON y simulaciones anteriores |
+| Reportes | Abrir reporte, CSV/JSON y simulaciones anteriores |
 | Auditoría | Consultar logs y sincronizarlos con Supabase mediante una acción explícita |
 
 **Modo PRESENTACIÓN** oculta los controles de configuración y deja visibles los contadores, etapa, progreso, últimos eventos y accesos a reportes. Puede activarse mientras se procesa una simulación. El trabajo se ejecuta en un hilo secundario y la ventana recibe cambios mediante una cola.
