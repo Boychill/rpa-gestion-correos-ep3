@@ -1,4 +1,4 @@
-﻿"""Regresión: los mensajes largos no deben desplazar las acciones fuera de la ventana."""
+"""Regresión: los mensajes largos no deben desplazar las acciones fuera de la ventana."""
 import tkinter as tk
 
 import pytest
@@ -75,4 +75,3 @@ def test_messages_keep_actions_accessible(settings, geometry):
         assert app.tabs.select() == str(app.tab_containers[5])
     finally:
         app.close()
-
