@@ -43,6 +43,20 @@ class Store(AbstractContextManager):
             return self.db.execute(sql, args)
 
     def ingest(self, execution_id, mailbox, scope, messages, cursor, phase, before_commit=None):
+        # Validar toda la página antes de confirmar datos o adelantar el cursor.
+        from rpa.config import timestamp
+        from rpa.runtime import RPAError
+        for msg in messages:
+            if not isinstance(msg, dict) or not isinstance(msg.get('id'), str) or not msg['id'].strip():
+                raise RPAError('MESSAGE_ID_INVALID')
+            if msg.get('removed'):
+                continue
+            if any(not isinstance(msg.get(k), str) for k in ('subject', 'sender', 'received')):
+                raise RPAError('MESSAGE_METADATA_INVALID')
+            try:
+                timestamp(msg['received'])
+            except (ValueError, TypeError, OverflowError) as exc:
+                raise RPAError('MESSAGE_DATE_INVALID') from exc
         counts = {"new": 0, "updated": 0, "duplicates": 0, "removed": 0}
         with self.db:
             for msg in messages:

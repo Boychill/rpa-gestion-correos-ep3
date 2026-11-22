@@ -8,11 +8,12 @@ from string import Template
 import subprocess
 import sys
 import hashlib
+import time
 from email.message import EmailMessage
 from email.policy import SMTP
 
 from rpa.excel import verify_report
-from rpa.runtime import RPAError
+from rpa.runtime import Audit, RPAError
 from rpa.store import utcnow
 
 
@@ -33,6 +34,35 @@ def render(settings, execution_id, metrics, duration):
 
 
 def send_report(settings, store, execution_id, path, body, client, token, budget, adapter=None, promote_dry_run=False):
+    """Auditar también los resultados fallidos que no lanzan una excepción."""
+    audit = Audit(store, execution_id, settings.runtime / 'logs')
+    started, timer = utcnow(), time.monotonic()
+    previous = store.row('SELECT state FROM sends WHERE execution_id=?', (execution_id,))
+    try:
+        state = _send_report(settings, store, execution_id, path, body, client, token, budget,
+                             adapter, promote_dry_run, audit)
+        row = store.row('SELECT reconciliation FROM sends WHERE execution_id=?', (execution_id,))
+        details = json.loads(row[0]) if row and row[0] and row[0].startswith('{') else {}
+        failed = state in {'ENVIO_INCIERTO', 'ERROR', 'PENDIENTE_CUOTA'}
+        recovery = ('REVIEW_NO_RESEND' if state in {'ENVIO_INCIERTO', 'ERROR'} else
+                    'WAIT_QUOTA' if state == 'PENDIENTE_CUOTA' else 'NONE')
+        audit.event('report_delivery', started, (time.monotonic()-timer)*1000,
+            result='FAILED' if failed else 'OK', code='REPORT_'+state,
+            context={'role':'remitente', 'job_id':execution_id,
+                     'http_status':details.get('http_status'),
+                     'recovery':recovery if failed else 'NO_REPEAT' if previous else recovery})
+        return state
+    except Exception as exc:
+        audit.event('report_delivery', started, (time.monotonic()-timer)*1000, result='FAILED',
+                    code=exc.code if isinstance(exc, RPAError) else type(exc).__name__,
+                    context={'role':'remitente', 'job_id':execution_id, 'recovery':'REVIEW_NO_RESEND'})
+        raise
+    finally:
+        audit.close()
+
+
+def _send_report(settings, store, execution_id, path, body, client, token, budget,
+                 adapter=None, promote_dry_run=False, audit=None):
     old = store.row("SELECT * FROM sends WHERE execution_id=?", (execution_id,))
     promote = bool(old and old['state']=='DRY_RUN' and promote_dry_run and settings.mail_mode=='SEND')
     if old and not promote:
@@ -70,11 +100,13 @@ def send_report(settings, store, execution_id, path, body, client, token, budget
             token = authorize(settings, budget, 'remitente').token
     store.execute("INSERT OR REPLACE INTO sends VALUES(?,?,?,?,?,?,?,NULL)",
         (execution_id, "PREPARADO", manifest["sha256"], manifest["size"], utcnow(), utcnow(), settings.mail_adapter))
+    audit.event('report_prepared', utcnow(), 0, code='REPORT_PREPARADO', context={'role':'remitente','job_id':execution_id})
     # La escritura anterior ocurre antes de cualquier efecto externo.
     state = "DRY_RUN"
     if settings.mail_mode == "SEND":
         try:
             store.execute("UPDATE sends SET state='EN_ENVIO',updated=? WHERE execution_id=?", (utcnow(), execution_id))
+            audit.event('report_attempted', utcnow(), 0, code='REPORT_INTENTADO', context={'role':'remitente','job_id':execution_id})
             if adapter:
                 adapter()
             elif settings.mail_adapter == 'GMAIL':
@@ -85,12 +117,12 @@ def send_report(settings, store, execution_id, path, body, client, token, budget
                 code = error_code(response)
                 if response.status_code == 200 and response.json().get('id'):
                     store.execute('UPDATE sends SET reconciliation=? WHERE execution_id=?',
-                        (json.dumps({'gmail_id':response.json()['id'], 'send_job_id':execution_id}), execution_id))
+                        (json.dumps({'gmail_id':response.json()['id'], 'send_job_id':execution_id, 'http_status':response.status_code}), execution_id))
                 else:
                     state = ('PENDIENTE_CUOTA' if code == 'GMAIL_DAILY_QUOTA' else
                              'ERROR' if response.status_code in (400, 401, 403, 404) else 'ENVIO_INCIERTO')
                     store.execute('UPDATE sends SET state=?,updated=?,reconciliation=? WHERE execution_id=?',
-                        (state, utcnow(), json.dumps({'code':code,'send_job_id':execution_id}), execution_id))
+                        (state, utcnow(), json.dumps({'code':code,'send_job_id':execution_id,'http_status':response.status_code}), execution_id))
                     return state
             elif settings.mail_adapter == "GRAPH":
                 response = client.post("https://graph.microsoft.com/v1.0/me/sendMail",
@@ -102,6 +134,8 @@ def send_report(settings, store, execution_id, path, body, client, token, budget
                            "contentBytes": base64.b64encode(path.read_bytes()).decode()}]}, "saveToSentItems": True})
                 if response.status_code != 202:
                     raise RPAError("SEND_NOT_ACCEPTED")
+                store.execute('UPDATE sends SET reconciliation=? WHERE execution_id=?',
+                              (json.dumps({'http_status':202}), execution_id))
             else:
                 payload = path.parent / "outlook_request.private.json"
                 try:

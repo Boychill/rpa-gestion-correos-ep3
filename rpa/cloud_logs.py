@@ -30,7 +30,7 @@ def log_records(store, execution_id=None):
     for run in store.rows("SELECT * FROM executions WHERE status!='RUNNING'"+condition+" ORDER BY started", args):
         metrics = json.loads(run["metrics"])
         send = store.row("SELECT state FROM sends WHERE execution_id=?", (run["id"],))
-        failure = store.row("SELECT code FROM events WHERE execution_id=? AND step_id='execution' AND result='FAILED' ORDER BY id DESC LIMIT 1", (run["id"],))
+        failure = store.row("SELECT code FROM events WHERE execution_id=? AND result='FAILED' ORDER BY id DESC LIMIT 1", (run["id"],))
         status = {"COMPLETED": "COMPLETADO", "NO_CHANGES": "COMPLETADO", "PARTIAL": "FALLIDO", "REVIEW": "REVISION"}.get(run["status"], run["status"])
         base = dict(installation_id=installation, execution_id=run["id"], source=run["source"],
                     processed=int(metrics.get("processed", 0)), classified=int(metrics.get("classified", 0)),

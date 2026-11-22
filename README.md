@@ -5,6 +5,30 @@ Proyecto Python para leer metadatos de correo, clasificar seis categorías, calc
 Para entender la estructura, reglas de negocio, flujo completo, estados y límites, consulta
 [Funcionamiento y estructura del proyecto](docs/EXPLICACION_PROYECTO.md).
 
+## Pruebas configurables y presentación
+
+La ventana incluye siete secciones y modo PRESENTACIÓN. Permite definir normales,
+especiales y distribución exacta, guardar configuraciones, usar una semilla y preparar
+campañas Gmail con vista previa y confirmación por tanda. Presets: 12/3, 24/6,
+300/60 y 1.000/200 (total/especiales). Los fallos técnicos solo se ejecutan localmente
+con mocks; las campañas reales conservan el límite de 500 y sus estados históricos.
+
+```powershell
+.\Abrir_Demo.cmd
+.\.venv\Scripts\python.exe scripts/escenarios_demo.py --preset quick
+.\.venv\Scripts\python.exe scripts/escenarios_demo.py --preset stress --seed 42
+```
+
+Estas simulaciones no envían correos ni usan servicios reales. Generan CSV, JSON y
+un Excel de pruebas con las cuatro hojas originales. La guía completa está en
+[DEMO_PRESENTACION.md](docs/DEMO_PRESENTACION.md), con un
+[guion de 11 minutos](docs/GUION_DEMO.md). El envío del reporte final sigue siendo
+una operación separada de las campañas. La estimación local de envíos de las últimas
+24 horas no representa la cuota oficial de Gmail.
+
+Resumen de implementación, pruebas y límites:
+[Entrega de mejoras de presentación](docs/ENTREGA_MEJORAS_PRESENTACION.md).
+
 ## Inicio en Windows
 
 Para presentar el programa, abre **[Abrir_Demo.cmd](Abrir_Demo.cmd)**. Incluye simulación

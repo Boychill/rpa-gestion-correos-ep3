@@ -2,6 +2,12 @@
 
 Documento de referencia para comprender, presentar y mantener el proyecto EP3. Describe la implementación y la evidencia registrada hasta el 20 de noviembre de 2026.
 
+Actualización funcional del 22 de noviembre: la interfaz ahora tiene siete secciones,
+presets y escenarios configurables. La [guía de presentación](DEMO_PRESENTACION.md)
+describe las cantidades, la semilla, las pruebas negativas locales, los reportes de
+escenarios y la confirmación por tanda. Las cifras de campañas reales citadas más
+abajo siguen siendo evidencia histórica del 20 de noviembre.
+
 El proyecto automatiza la lectura de metadatos de correo, su clasificación en seis categorías, el cálculo de plazos en días hábiles de Chile y la generación de un reporte Excel. Conserva el estado del trabajo en SQLite, registra tiempos y errores, sincroniza auditoría con Supabase y permite demostrar el proceso desde una ventana local.
 
 Incluye un generador de correos de prueba para comprobar el flujo con Gmail real. **Preparar mensajes, enviarlos, recibirlos y analizarlos son etapas diferentes:** cada una tiene su propia evidencia y puede completarse parcialmente.
@@ -96,6 +102,9 @@ RPA/
 | --- | --- |
 | `rpa/config.py` | Carga `.env`, aplica variables del proceso, valida modos, cuentas, fechas y límites; calcula firmas de configuración |
 | `rpa/demo_actions.py` | Conecta los botones con simulación, preparación, envío, análisis y consolidación |
+| `rpa/scenarios.py` | Valida cantidades y configuraciones, define presets y genera escenarios reproducibles |
+| `rpa/scenario_runner.py` | Ejecuta escenarios locales aislados y fallos técnicos mediante transportes simulados |
+| `rpa/scenario_reports.py` | Compara resultados, separa contadores y exporta CSV, JSON y una copia Excel de pruebas |
 | `rpa/orchestrator.py` | Coordina una ejecución de lectura, clasificación, calendario, Excel, reporte y auditoría |
 | `rpa/gmail_auth.py` | Autoriza cuentas por rol, guarda tokens protegidos y los refresca |
 | `rpa/gmail.py` | Lee metadatos Gmail, pagina resultados y consulta cambios incrementales |
