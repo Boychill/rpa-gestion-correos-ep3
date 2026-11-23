@@ -1,0 +1,56 @@
+{
+  "local_date": "2026-11-23",
+  "timezone": "America/Santiago",
+  "protected_files_checked": 32,
+  "protected_files_changed": 0,
+  "ui": {
+    "tabs": 7,
+    "responsive_simulation": true,
+    "summary": {
+      "mode": "SIMULATION",
+      "configured": 12,
+      "prepared": 12,
+      "accepted": 0,
+      "received": 0,
+      "classified": 12,
+      "normal": 9,
+      "special": 3,
+      "special_validated": 3,
+      "special_pending": 0,
+      "passed": 12,
+      "failed": 0,
+      "pending": 0,
+      "unexpected_errors": 0,
+      "simulated_technical": 0,
+      "real_provider_failures": 0,
+      "duplicates": 0,
+      "retries": 0,
+      "duration_seconds": 0.7682,
+      "average_seconds": 0.064014,
+      "checked_at": "2026-11-23T06:00:26.338518+00:00"
+    },
+    "report_path": "output\\ui_validation\\presentacion\\14b3532c3b224611800495be21bcf36b\\98010546-a0f2-44ea-baad-181d028a985d\\reporte_pruebas.xlsx",
+    "real_network": false
+  },
+  "broken_local_links": [],
+  "cli": [
+    {
+      "command": "main.py --help",
+      "exit_code": 0
+    },
+    {
+      "command": "scripts/escenarios_demo.py --help",
+      "exit_code": 0
+    },
+    {
+      "command": "scripts/gmail_demo.py --help",
+      "exit_code": 0
+    },
+    {
+      "command": "scripts/maintenance.py --help",
+      "exit_code": 0
+    }
+  ],
+  "compileall": "PASSED",
+  "pip_check": "PASSED"
+}

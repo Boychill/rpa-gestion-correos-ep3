@@ -1,6 +1,14 @@
 # Funcionamiento y estructura del proyecto RPA de gestión de correos
 
-Documento de referencia para comprender, presentar y mantener el proyecto EP3. Describe la implementación y la evidencia registrada hasta el 20 de noviembre de 2026.
+Documento de referencia para comprender, presentar y mantener el proyecto EP3. Actualizado el 23 de noviembre de 2026; conserva identificadas las evidencias históricas de campañas reales.
+
+Actualización funcional del 22 de noviembre: la interfaz ahora tiene siete secciones,
+presets y escenarios configurables. La [guía de presentación](DEMO_PRESENTACION.md)
+describe las cantidades, la semilla, las pruebas negativas locales, los reportes de
+escenarios y la confirmación por tanda. Las cifras de campañas reales citadas más
+abajo siguen siendo evidencia histórica del 20 de noviembre.
+
+La revisión del 23/11 verifica 127 pruebas, escenarios locales, navegación con mensajes largos y conexiones reales de lectura. Los controles de Inicio quedan separados del estado desplazable, las barras de acciones se reorganizan por ancho y las pestañas permiten desplazar su contenido. Consulta [la validación actual](VALIDACION_2026-11-23.md) y [la guía de uso paso a paso](../COMO_UTILIZAR.md).
 
 El proyecto automatiza la lectura de metadatos de correo, su clasificación en seis categorías, el cálculo de plazos en días hábiles de Chile y la generación de un reporte Excel. Conserva el estado del trabajo en SQLite, registra tiempos y errores, sincroniza auditoría con Supabase y permite demostrar el proceso desde una ventana local.
 
@@ -96,6 +104,9 @@ RPA/
 | --- | --- |
 | `rpa/config.py` | Carga `.env`, aplica variables del proceso, valida modos, cuentas, fechas y límites; calcula firmas de configuración |
 | `rpa/demo_actions.py` | Conecta los botones con simulación, preparación, envío, análisis y consolidación |
+| `rpa/scenarios.py` | Valida cantidades y configuraciones, define presets y genera escenarios reproducibles |
+| `rpa/scenario_runner.py` | Ejecuta escenarios locales aislados y fallos técnicos mediante transportes simulados |
+| `rpa/scenario_reports.py` | Compara resultados, separa contadores y exporta CSV, JSON y una copia Excel de pruebas |
 | `rpa/orchestrator.py` | Coordina una ejecución de lectura, clasificación, calendario, Excel, reporte y auditoría |
 | `rpa/gmail_auth.py` | Autoriza cuentas por rol, guarda tokens protegidos y los refresca |
 | `rpa/gmail.py` | Lee metadatos Gmail, pagina resultados y consulta cambios incrementales |
@@ -311,10 +322,13 @@ Comandos de consulta y soporte, desde la raíz del proyecto:
 
 ## Pruebas y estado comprobado
 
+La revisión final incorpora 144 pruebas, envío de Excel desde Reportes con outbox y confirmación, auditoría ampliada opcional y GitHub Actions. [Detalle y límites](REVISION_FINAL.md).
+
 La evidencia describe ejecuciones concretas; no garantiza que la red, los permisos o las cuotas sigan disponibles en una presentación posterior.
 
 | Comprobación registrada | Resultado | Evidencia |
 | --- | --- | --- |
+| Validación del 23 de noviembre | 127 pruebas aprobadas, escenarios de 12/300/1.000 correctos, interfaz y conexiones de lectura verificadas | [Informe actual](VALIDACION_2026-11-23.md) |
 | Suite automatizada del 20 de noviembre | 90 pruebas, sin fallos ni errores | [pytest.xml](evidence/pytest.xml) |
 | Simulaciones conjuntas de 100, 300, 500 y 1.000 | Clasificación y archivos verificados; segunda ejecución sin novedades; sin envíos reales | [pruebas_conjuntos.json](evidence/pruebas_conjuntos.json) |
 | Campaña Gmail anterior de 500 | 500 recibidos y clasificados correctamente | [prueba_conjunta_gmail.json](evidence/prueba_conjunta_gmail.json) |

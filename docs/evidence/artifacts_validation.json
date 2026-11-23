@@ -1,18 +1,28 @@
 {
   "informe_tecnico": {
-    "pages": 13,
-    "all_pages_have_content": true
+    "pages": 18,
+    "all_pages_have_content": true,
+    "sha256": "83735fb3207c6cfc3d9a403e40a2c1e5f825cf9a97d2d3636991bc0e69a1dcd0"
   },
   "presentacion": {
     "pages": 11,
-    "all_pages_have_content": true
+    "all_pages_have_content": true,
+    "sha256": "0775968b234baa6cad36367721e0644c31a2f3e91664d70a03425ef25fd77936"
   },
   "guion_demo": {
     "pages": 2,
-    "all_pages_have_content": true
+    "all_pages_have_content": true,
+    "sha256": "ba9c762f70eb7cac65980e29ada9f5e6ba22e050cea6356b66dedfb3eb615120"
   },
   "pptx": {
     "slides": 11,
-    "overflow_shapes": 0
+    "overflow_shapes": 0,
+    "sha256": "b920fe246b23fe42b474bcbc12c5c24b60215e825e407c4632dabbe43832b113"
+  },
+  "archive_structure": {
+    "manifest_verified": true,
+    "private_paths_excluded": true,
+    "usage_guide_included": true,
+    "ci_workflow_included": true
   }
 }

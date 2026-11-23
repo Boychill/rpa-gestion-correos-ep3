@@ -1,0 +1,116 @@
+# Validación del proyecto · 23 de noviembre de 2026
+
+Este documento conserva las pruebas históricas de la jornada. La revisión final posterior, sin nuevos envíos, está en [REVISION_FINAL.md](REVISION_FINAL.md); su suite completa figura en `evidence/revision_final_pytest.xml` y sustituye a las 127 pruebas como referencia de la versión actual.
+
+Fecha local: 23/11/2026, America/Santiago. Entorno: Windows, Python 3.13.14. En la primera fase se validaron código, dependencias, interfaz, escenarios, capacidad local y conexiones de lectura sin enviar correos. Posteriormente, a petición del usuario, se realizaron pruebas reales de tres y 300 mensajes. No se reanudaron las campañas históricas pendientes.
+
+## Prueba real de 300 correos
+
+Entre las 14:11:29 y 14:20:20 de Santiago se completó la campaña `a69d478d-5a01-42f0-8f2e-fadf4ccdf366`, con 240 mensajes normales y 60 especiales de contenido. Se realizó una única invocación de envío, con un segundo de pausa entre mensajes; no hubo errores de proveedor ni reintentos.
+
+| Comprobación | Resultado |
+| --- | --- |
+| Preparados, aceptados y recibidos | 300 en cada etapa |
+| Ubicación en el receptor | 248 en Recibidos, 52 en Spam, 0 en Papelera |
+| Clasificados correctamente | 300 de 300 |
+| Casos especiales validados | 60 de 60, con 12 por cada tipo de contenido |
+| Pendientes, fallidos y duplicados | 0 |
+| Repetición del análisis | NO_CHANGES; sin nuevos envíos ni duplicados |
+| Excel | Cuatro hojas, 300 filas de correos, apertura y hash comprobados |
+| Supabase | 634 registros de cuatro ejecuciones comprobados contra SQLite |
+| Descargas | Cuatro logs con contenido/hash verificado y vencimiento registrado a 15 días |
+
+Categorías obtenidas: Solicitud 39, Consulta 54, Reclamo 51, Urgente 54, Información 50 y Otros 52. Los mensajes de Spam se incluyeron en la lectura de esta campaña sin moverlos. El flujo tardó aproximadamente 8 minutos y 51 segundos, incluyendo envío, recepción, clasificación y reportes.
+
+Reporte local: `output/13f8bda9-1966-49d9-b346-3a87852c6843/reporte_pruebas.xlsx`. No se envió el Excel como adjunto. Evidencia: [prueba_real_300_20261123.json](evidence/prueba_real_300_20261123.json).
+
+## Prueba real posterior: envío, recepción, análisis y Supabase
+
+El 23/11/2026, entre las 14:07:56 y 14:08:14 de Santiago, se ejecutó una campaña nueva de **3 mensajes reales** usando las cuentas de prueba configuradas. Se utilizó un intervalo de dos segundos y una única invocación de envío.
+
+| Comprobación | Resultado |
+| --- | --- |
+| Aceptación por Gmail | 3 de 3, sin error de envío |
+| Recepción independiente en el buzón destinatario | 3 de 3 en Recibidos; ninguno en Spam ni Papelera |
+| Clasificación | 3 correctos: Información, Consulta y Reclamo |
+| Casos de contenido | Un normal y dos especiales: tildes y prioridad entre categorías |
+| Excel de pruebas | Generado y reabierto; cuatro hojas y tres filas de correos |
+| Repetición del análisis | NO_CHANGES, tres recibidos, cero duplicados y cero nuevos envíos |
+| Supabase | 32 registros remotos de cuatro ejecuciones coinciden con sus registros locales |
+| Descargas de logs | Cuatro archivos `.log`, contenido y hash verificados, vencimiento registrado a 15 días |
+
+Campaña: `ea92521e-301e-4e36-a4df-76b8921f3223`. Reporte local: `output/2470152a-22bc-458c-a836-73f08080559f/reporte_pruebas.xlsx`. Los logs descargados están en `runtime/logs/descargas/`; sus nombres, hashes y vencimientos se registran en la evidencia. El Excel se generó localmente, no se envió como adjunto.
+
+Evidencia sanitizada: [prueba_real_3_20261123.json](evidence/prueba_real_3_20261123.json). Los apartados siguientes conservan los resultados de la primera fase, sin envío.
+
+## Suite automatizada
+
+**127 pruebas aprobadas, 0 fallos**, en 48,76 segundos. `pip check` no encontró dependencias incompatibles. Aparece un aviso de deprecación de Starlette/httpx en el cliente de pruebas; no causó fallos y no se cambiaron dependencias durante esta validación.
+
+La suite cubre clasificación, plazos, persistencia, paginación y recuperación, envío con proveedores simulados, autenticación Gmail, límites de reintentos, estados inciertos, Supabase con mocks, descargas, retención, panel, acciones de demostración, escenarios y confirmación de envío. Las pruebas de interfaz comprueban botones accesibles con mensajes largos en ventanas de 680×550, 800×600 y 1160×678, desplazamiento y modo presentación.
+
+Evidencia: [validacion_20261123_pytest.xml](evidence/validacion_20261123_pytest.xml).
+
+## Escenarios y capacidad sin red
+
+Se bloqueó el transporte HTTP real durante las simulaciones. Los casos técnicos usan mocks y no provocan errores en los servicios externos.
+
+| Preset | Casos correctos | Clasificados | Especiales comprobados | Casos técnicos simulados | Errores inesperados |
+| --- | --- | --- | --- | --- | --- |
+| Rápida | 12/12 | 12 | 3/3 | 0 | 0 |
+| Carga local | 300/300 | 260 | 60/60 | 40 | 0 |
+| Estrés local | 1.000/1.000 | 870 | 200/200 | 130 | 0 |
+
+Los rechazos técnicos esperados son pruebas correctas y no cuentan como correos clasificados. Los libros generados por estos escenarios se reabrieron con openpyxl y conservaron las hojas Resumen, Correos, Referencia_API y Ejecuciones. Se registraron hashes de los archivos generados.
+
+También se ejecutó el flujo sintético base, sin escenarios técnicos, con estado separado para cada cantidad:
+
+| Mensajes | Clasificados | Estado | Envío | Tiempo de pared |
+| --- | --- | --- | --- | --- |
+| 100 | 100 | COMPLETED | DRY_RUN | 0,781 s |
+| 300 | 300 | COMPLETED | DRY_RUN | 0,985 s |
+| 500 | 500 | COMPLETED | DRY_RUN | 1,141 s |
+| 1.000 | 1.000 | COMPLETED | DRY_RUN | 1,664 s |
+
+Estas mediciones corresponden a datos locales y a este equipo; no representan latencia ni capacidad de envío de Gmail. El benchmark anterior con tracemalloc permanece como evidencia histórica independiente.
+
+Evidencia: [validacion_20261123_local.json](evidence/validacion_20261123_local.json).
+
+## Aplicación de escritorio
+
+Se ejecutó una simulación rápida desde los controles reales de Tkinter, con red bloqueada y carpetas aisladas. La ventana siguió respondiendo, produjo 12 casos correctos y permitió cambiar al modo PRESENTACIÓN. Se generaron capturas locales de la configuración y del resultado; las pruebas automatizadas adicionales verificaron el diseño con ventanas pequeñas.
+
+Se comprobó la compilación de los módulos y la ayuda de los comandos principal, escenarios, campañas y mantenimiento. No se encontraron enlaces locales rotos en README, la guía de uso y los documentos Markdown de `docs/`. Los hashes de 32 archivos protegidos permanecieron sin cambios durante la validación de escenarios y conexiones: `.env`, archivos OAuth, estado SQLite y manifiestos de campañas. Evidencia: [validacion_20261123_operacion.json](evidence/validacion_20261123_operacion.json).
+
+## Conexiones reales, sin envío
+
+| Integración | Resultado y alcance |
+| --- | --- |
+| Gmail remitente | Renovación remota del token correcta; no se probó envío ni entrega |
+| Gmail receptor | Renovación correcta, identidad comprobada y listado de una página limitado a un mensaje con HTTP 200; no se descargaron cuerpos |
+| Supabase | Consulta de esquema `rpa_logs`, con selección de columnas y límite cero, HTTP 200; no se escribieron registros remotos |
+| Feriados Chile 2026 | GET real HTTP 200; 17 entradas validadas |
+| Feriados Chile 2027 | GET real HTTP 200; 19 entradas validadas |
+| Excel COM | No disponible: `EXCEL_COM_UNAVAILABLE`, componente no registrado |
+| Outlook COM | Componente no registrado; no se probó envío |
+| Microsoft Graph | No se realizó una prueba con buzón real; adaptador cubierto con mocks |
+
+Los tokens se renovaron solo en memoria para comprobar las conexiones; no se guardaron cambios en los archivos OAuth. Las evidencias contienen estados y códigos, sin claves, tokens, cuerpos ni direcciones de cuentas. La lectura satisfactoria de Supabase no reemplaza una prueba nueva de escritura o de políticas RLS. La evidencia histórica de escritura/idempotencia del 18/11 sigue separada.
+
+Evidencia: [conexiones](evidence/validacion_20261123_conexiones.json), [Office y API pública](evidence/real_checks.json), [feriados 2026](evidence/api_CL_2026.json) y [feriados 2027](evidence/api_CL_2027.json).
+
+## Uso de estos resultados
+
+Para operar el programa consulta [COMO_UTILIZAR.md](../COMO_UTILIZAR.md). Las campañas históricas de Gmail mantienen sus propios resultados; las pruebas locales de 1.000 casos no significan que se hayan enviado o recibido 1.000 correos reales hoy. Esta fase inicial no regeneró PDF/PPTX; su regeneración se incorpora posteriormente en la revisión final.
+
+Para repetir la suite:
+
+```powershell
+.\.venv\Scripts\python.exe -m pytest --junitxml=docs/evidence/validacion_20261123_pytest.xml
+.\.venv\Scripts\python.exe -m pip check
+.\.venv\Scripts\python.exe scripts/escenarios_demo.py --preset quick
+.\.venv\Scripts\python.exe scripts/escenarios_demo.py --preset load --seed 42
+.\.venv\Scripts\python.exe scripts/escenarios_demo.py --preset stress --seed 42
+```
+
+Las comprobaciones de servicios reales corresponden al momento registrado en sus JSON. Su disponibilidad posterior depende de permisos, red y estado del proveedor.

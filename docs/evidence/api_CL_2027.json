@@ -4,8 +4,8 @@
   "url": "https://date.nager.at/api/v3/PublicHolidays/2027/CL",
   "status": 200,
   "origin": "real",
-  "queried": "2026-11-18T16:31:15.153635+00:00",
-  "count": 17,
+  "queried": "2026-11-23T06:00:03.706687+00:00",
+  "count": 19,
   "data": [
     {
       "date": "2027-01-01",
@@ -48,7 +48,7 @@
     },
     {
       "date": "2027-05-01",
-      "localName": "Día del Trabajo",
+      "localName": "Día Nacional del Trabajo",
       "name": "Labour Day",
       "countryCode": "CL",
       "fixed": false,
@@ -115,7 +115,7 @@
     },
     {
       "date": "2027-07-16",
-      "localName": "Virgen del Carmen",
+      "localName": "Día de la Virgen del Carmen",
       "name": "Our Lady of Mount Carmel",
       "countryCode": "CL",
       "fixed": false,
@@ -140,8 +140,36 @@
       ]
     },
     {
+      "date": "2027-08-20",
+      "localName": "Nacimiento del Prócer de la Independencia",
+      "name": "Birth of Bernardo O'Higgins",
+      "countryCode": "CL",
+      "fixed": false,
+      "global": false,
+      "counties": [
+        "CL-NB"
+      ],
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
+      "date": "2027-09-17",
+      "localName": "Feriado adicional de Fiestas Patrias",
+      "name": "Additional National Holiday",
+      "countryCode": "CL",
+      "fixed": false,
+      "global": true,
+      "counties": null,
+      "launchYear": null,
+      "types": [
+        "Public"
+      ]
+    },
+    {
       "date": "2027-09-18",
-      "localName": "Fiestas Patrias",
+      "localName": "Independencia Nacional",
       "name": "National holiday",
       "countryCode": "CL",
       "fixed": false,
@@ -167,7 +195,7 @@
     },
     {
       "date": "2027-10-11",
-      "localName": "Día del Descubrimiento de Dos Mundos",
+      "localName": "Encuentro de Dos Mundos",
       "name": "Columbus Day",
       "countryCode": "CL",
       "fixed": false,

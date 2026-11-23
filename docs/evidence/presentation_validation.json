@@ -1,0 +1,92 @@
+{
+  "checked_at": "2026-11-22T17:39:11.437030+00:00",
+  "real_network": false,
+  "mail_sent": false,
+  "groups": [
+    {
+      "preset": "quick",
+      "summary": {
+        "mode": "SIMULATION",
+        "configured": 12,
+        "prepared": 12,
+        "accepted": 0,
+        "received": 0,
+        "classified": 12,
+        "normal": 9,
+        "special": 3,
+        "special_validated": 3,
+        "special_pending": 0,
+        "passed": 12,
+        "failed": 0,
+        "pending": 0,
+        "unexpected_errors": 0,
+        "simulated_technical": 0,
+        "real_provider_failures": 0,
+        "duplicates": 0,
+        "retries": 0,
+        "duration_seconds": 1.3132,
+        "average_seconds": 0.109437,
+        "checked_at": "2026-11-22T17:39:12.754017+00:00"
+      },
+      "report_path": "output\\presentacion\\30d87b183d0e46f3b7e0551fecced434\\7cc7b50c-39e6-41bf-a559-1df2c03651a2\\reporte_pruebas.xlsx",
+      "report_sha256": "98829512473b801131e9a942dc5cbbc955c43a21064318702836347477a34513"
+    },
+    {
+      "preset": "load",
+      "summary": {
+        "mode": "SIMULATION",
+        "configured": 300,
+        "prepared": 300,
+        "accepted": 0,
+        "received": 0,
+        "classified": 260,
+        "normal": 240,
+        "special": 60,
+        "special_validated": 60,
+        "special_pending": 0,
+        "passed": 300,
+        "failed": 0,
+        "pending": 0,
+        "unexpected_errors": 0,
+        "simulated_technical": 40,
+        "real_provider_failures": 0,
+        "duplicates": 4,
+        "retries": 32,
+        "duration_seconds": 2.9704,
+        "average_seconds": 0.009901,
+        "checked_at": "2026-11-22T17:39:16.006222+00:00"
+      },
+      "report_path": "output\\presentacion\\3898f841471242a281856b32b882526a\\d216e4b0-1eb5-4d19-921c-f31225e5585e\\reporte_pruebas.xlsx",
+      "report_sha256": "7e55305ae8af01f920d391c02715044e83c438ab6080af9cd8ae32242f9fb326"
+    },
+    {
+      "preset": "stress",
+      "summary": {
+        "mode": "SIMULATION",
+        "configured": 1000,
+        "prepared": 1000,
+        "accepted": 0,
+        "received": 0,
+        "classified": 870,
+        "normal": 800,
+        "special": 200,
+        "special_validated": 200,
+        "special_pending": 0,
+        "passed": 1000,
+        "failed": 0,
+        "pending": 0,
+        "unexpected_errors": 0,
+        "simulated_technical": 130,
+        "real_provider_failures": 0,
+        "duplicates": 13,
+        "retries": 104,
+        "duration_seconds": 8.1489,
+        "average_seconds": 0.008149,
+        "checked_at": "2026-11-22T17:39:25.189588+00:00"
+      },
+      "report_path": "output\\presentacion\\37d71d93f24b4e578f551533f0881a8e\\455bda27-5fd1-46b9-b4e2-0ed904be17ec\\reporte_pruebas.xlsx",
+      "report_sha256": "9d5b87c3f5d82dcb45a9203a07e5b28a88879376749ffd0a6231ca6e94e790c0"
+    }
+  ],
+  "protected_files_unchanged": 30
+}

@@ -59,7 +59,7 @@ def main():
                 if args.execution_id and not store.row("SELECT id FROM executions WHERE id=?", (args.execution_id,)):
                     raise RPAError("EXECUTION_NOT_FOUND")
                 records = (fetch_cloud_logs(settings, store, args.execution_id) if args.source == "SUPABASE"
-                           else log_records(store, args.execution_id))
+                           else log_records(store, args.execution_id, include_context=settings.supabase_context_enabled))
                 result = save_log(settings, store, records, args.source, args.execution_id)
             print(json.dumps(result, ensure_ascii=False, indent=2))
     else:

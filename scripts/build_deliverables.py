@@ -92,6 +92,11 @@ def markdown_story(path, styles, width):
     return story
 
 
+def real_mail_summary():
+    evidence = json.loads((EVIDENCE / "prueba_real_300_20261123.json").read_text(encoding="utf-8"))
+    return f"Gmail real: {evidence['accepted']} aceptados, {evidence['received']} recibidos y {evidence['correct']} correctos"
+
+
 def report(benchmark, checks, test_summary, font, bold):
     styles = getSampleStyleSheet()
     for style in styles.byName.values():
@@ -107,16 +112,16 @@ def report(benchmark, checks, test_summary, font, bold):
     width = A4[0]-88
     story = [Paragraph("EVALUACIÓN PARCIAL 3 · ATY1102", styles["Heading2"]),
              Paragraph("Gestión inteligente<br/>de correos", styles["Title"]), Spacer(1, 14),
-             Paragraph("Implementación Python · SQLite · Microsoft Graph · Excel · Auditoría local", styles["Normal"]),
+             Paragraph("Python · Gmail API · SQLite · Supabase · Tkinter · Excel", styles["Normal"]),
              Spacer(1, 20), Paragraph("Estado de la entrega", styles["Heading2"])]
     summary = [["Componente", "Resultado verificado"], ["Pruebas automatizadas", test_summary],
         ["Capacidad", "100, 300, 500 y 1.000 mensajes sintéticos; sin envío real"],
         ["API real", "; ".join(f"Chile {a['year']}: {a['status']}" for a in checks["api"])],
         ["Escritorio", "Excel COM no disponible en el equipo inicial; acción real pendiente"],
-        ["Correo real", "Buzón autorizado y envío pendientes"],
+        ["Correo real", real_mail_summary()],
         ["Evaluación", "Matriz provisional; pauta oficial no proporcionada"]]
     story += [table(summary, [140, width-140], styles), Spacer(1, 20),
-              Paragraph("Las métricas sintéticas no acreditan rendimiento de Graph ni interacción real con Office.", styles["Normal"]),
+              Paragraph("Las métricas locales y las campañas reales tienen evidencia separada. Excel COM permanece pendiente.", styles["Normal"]),
               PageBreak()]
     story += markdown_story(ROOT / "docs/INFORME.md", styles, width)
     story += [PageBreak(), Paragraph("Mediciones registradas", styles["Title"])]
@@ -138,7 +143,7 @@ def report(benchmark, checks, test_summary, font, bold):
         story += [PageBreak(), Paragraph("Diagrama · "+name, styles["Title"]),
                   Image(str(path), width=iw*scale, height=ih*scale), Spacer(1, 10),
                   Paragraph(f"Fuente editable: docs/diagramas/{name}.mmd. SVG y PDF adjuntos permiten ampliar detalles.", styles["Small"])]
-    for doc in ("PRUEBAS_GMAIL.md", "MATRIZ_EP3.md", "FUENTES.md"):
+    for doc in ("REVISION_FINAL.md", "MATRIZ_EP3.md", "FUENTES.md"):
         story += [PageBreak()] + markdown_story(ROOT / "docs" / doc, styles, width)
     def footer(c, doc):
         c.setFont(font, 8)
@@ -155,12 +160,13 @@ def report(benchmark, checks, test_summary, font, bold):
 
 def slides_data(benchmark, test_summary):
     largest = benchmark["results"][-1]
+    real = json.loads((EVIDENCE / "prueba_real_300_20261123.json").read_text(encoding="utf-8"))
     return [
         ("01 · CONTEXTO", "Un reporte, mil correos", ["Leer metadatos · clasificar · calcular plazos · consolidar",
           "Python + SQLite: flujo reproducible y recuperación persistente", "DRY_RUN por defecto; sin respuestas automáticas"], None),
         ("02 · DISEÑO", "Subprocesos con estado durable", ["main → orquestador → adaptadores → auditoría"], "arquitectura"),
         ("03 · CONTINUIDAD", "Reanudar sin perder mensajes", ["Cada página y su cursor se confirman juntos",
-          "ID estable + fingerprint: duplicado o actualización", "429: Retry-After y tres intentos totales; 410: resincronizar",
+          "ID estable + fingerprint: duplicado o actualización", "Lecturas: reintentos acotados; historial Gmail vencido: resincronizar",
           "Los pendientes sobreviven a una interrupción"], None),
         ("04 · REGLAS", "Seis categorías, prioridad visible", ["Urgente → Reclamo → Solicitud → Consulta → Información → Otros",
           "Tildes y mayúsculas normalizadas; palabras completas", "Asunto vacío o sin señal: Otros",
@@ -173,7 +179,7 @@ def slides_data(benchmark, test_summary):
           "En este equipo: Excel COM no disponible"], None),
         ("07 · ENVÍO", "Un resultado incierto no se reenvía", ["PREPARADO persistente antes de llamar al proveedor",
           "ACEPTADO no confirma entrega", "ENVIO_INCIERTO requiere reconciliación separada",
-          "Un destinatario permitido; hash y tamaño del adjunto"], None),
+          "Reportes: destinatario autorizado, vista previa y confirmación"], None),
         ("08 · AUDITORÍA", "Exportar, verificar, confirmar", ["Panel local con filtros y descargas log / csv / json / zip",
           "ZIP + manifiesto + hashes antes de limpiar", "Confirmación explícita de copia y frase de eliminación",
           "Deduplicación, cursores, pendientes y envíos protegidos"], None),
@@ -181,12 +187,13 @@ def slides_data(benchmark, test_summary):
           f"1.000 mensajes · {largest['seconds']:.2f} s · {largest['metrics']['queries']} páginas",
           f"{largest['throughput']:.2f} mensajes/s; pico Python {largest['python_peak_bytes']/1048576:.2f} MiB",
           test_summary, "Estas cifras no miden Gmail ni Office reales"], None),
-        ("10 · IMPACTO", "Automatizar con revisión y trazabilidad", ["Reglas visibles y categoría Otros para ambigüedad",
-          "Campos mínimos y evidencia redactada; SQLite privado", "Incrementalidad, caché y lotes reducen trabajo repetido",
-          "Mejora: recuperación + auditoría descargable verificable"], None),
+        ("10 · GMAIL REAL", "Evidencia histórica independiente", [real_mail_summary(),
+          f"{real['mailbox_locations']['INBOX']} en Recibidos y {real['mailbox_locations']['SPAM']} en Spam",
+          f"{real['correct']} correctos; {real['scenarios']['special_validated']} especiales; {real['duplicates']} duplicados",
+          "Esta revisión final no realiza nuevos envíos"], None),
         ("11 · ACEPTACIÓN", "Lo que falta demostrar", ["Contrastar pauta oficial y validar herramienta requerida",
-          "Ejecutar Excel real con evidencia antes/después", "Leer buzón autorizado y enviar un consolidado de prueba",
-          "Supabase verificado; falta confirmar recepción del correo real"], None)]
+          "Excel COM sigue pendiente de un equipo habilitado", "Envío del Excel: mocks aprobados; prueba real pendiente",
+          "Auditoría ampliada: aplicar migración SQL antes de activarla"], None)]
 
 
 def presentations(slides, font, bold):
@@ -269,11 +276,11 @@ def presentations(slides, font, bold):
 
 def package():
     paths = []
-    top = ["main.py", "autenticar_gmail.py", "demo_presentacion.py", "Abrir_Demo.cmd", "README.md", "pyproject.toml", "requirements.txt", "requirements-dev.txt", "requirements-lock.txt",
+    top = ["main.py", "autenticar_gmail.py", "demo_presentacion.py", "Abrir_Demo.cmd", "README.md", "COMO_UTILIZAR.md", "pyproject.toml", "requirements.txt", "requirements-dev.txt", "requirements-lock.txt",
            ".env.example", ".gitignore", "PROMPT_CODEX_EP3_RPA_GESTION_CORREOS.md", "PROMPT_CODEX_GOOGLE_CLOUD_GMAIL_EP3.md"]
     for name in top:
         paths.append((ROOT / name, name))
-    for directory in ("rpa", "config", "migrations", "supabase", "templates", "tests", "scripts", "docs", "fixtures"):
+    for directory in ("rpa", "config", "migrations", "supabase", "templates", "tests", "scripts", "docs", "fixtures", ".github"):
         for path in sorted((ROOT / directory).rglob("*")):
             if (path.is_file() and "__pycache__" not in path.parts and path.suffix not in {".pyc", ".private", ".bin"}
                     and not (directory == "config" and path.relative_to(ROOT/'config').as_posix() != "reglas.json")
@@ -306,10 +313,11 @@ def main():
     font, bold = font_setup()
     benchmark = json.loads((EVIDENCE / "benchmark.json").read_text(encoding="utf-8"))
     checks = json.loads((EVIDENCE / "real_checks.json").read_text(encoding="utf-8"))
-    suites = ET.parse(EVIDENCE / "pytest.xml").getroot().findall("testsuite")
+    suites = ET.parse(EVIDENCE / "revision_final_pytest.xml").getroot().findall("testsuite")
     total = sum(int(s.attrib["tests"]) for s in suites)
     failed = sum(int(s.attrib["failures"])+int(s.attrib["errors"]) for s in suites)
-    test_summary = f"{total} pruebas; {failed} fallos en la corrida registrada"
+    skipped = sum(int(s.attrib.get("skipped", 0)) for s in suites)
+    test_summary = f"{total-skipped} aprobadas; {failed} fallos; {skipped} omitidas"
     assert failed == 0, "Corregir pruebas antes de generar una entrega validada"
     report(benchmark, checks, test_summary, font, bold)
     presentations(slides_data(benchmark, test_summary), font, bold)

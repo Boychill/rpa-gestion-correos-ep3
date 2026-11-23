@@ -17,7 +17,7 @@ from rpa.log_files import finish_logging
 from rpa.gmail import GmailReader, authenticate_gmail
 
 
-def read_pages(settings, store, execution_id, reader, audit, budget, resume, metrics):
+def read_pages(settings, store, execution_id, reader, audit, budget, resume, metrics, progress=None):
     checkpoint = store.row("SELECT * FROM checkpoints WHERE scope=?", (settings.scope,))
     if resume and metrics.get("reading_complete"):
         return
@@ -38,6 +38,8 @@ def read_pages(settings, store, execution_id, reader, audit, budget, resume, met
                 metrics[key] = metrics.get(key, 0) + value
             metrics["reading_complete"] = page.phase == "DELTA"
             store.execute("UPDATE executions SET metrics=? WHERE id=?", (encode(metrics), execution_id))
+            if progress:
+                progress({'stage':'Lectura guardada', 'done':metrics.get('new',0)+metrics.get('updated',0), 'total':None})
         if page.phase == "DELTA":
             break
         cursor = page.cursor
@@ -55,7 +57,7 @@ def classify_pending(settings, store, execution_id, classifier, audit, budget):
             return
 
 
-def run(settings, resume_id=None, reader_factory=None, maintenance=None):
+def run(settings, resume_id=None, reader_factory=None, maintenance=None, progress=None):
     settings.validate()
     settings.runtime.mkdir(parents=True, exist_ok=True)
     settings.output.mkdir(parents=True, exist_ok=True)
@@ -104,7 +106,8 @@ def run(settings, resume_id=None, reader_factory=None, maintenance=None):
                     reader = (reader_factory(settings) if reader_factory else
                               GraphReader(settings, http, token) if settings.source == "GRAPH" else
                               GmailReader(settings, http, token) if settings.source == "GMAIL" else FixtureReader(settings))
-                read_pages(settings, store, execution_id, reader, audit, budget, bool(resume_id), metrics)
+                read_pages(settings, store, execution_id, reader, audit, budget, bool(resume_id), metrics, progress)
+                if progress:progress({'stage':'Clasificando y calculando plazos', 'done':0,'total':None})
                 classify_pending(settings, store, execution_id, classifier, audit, budget)
                 items = store.items(execution_id)
                 metrics.update(processed=len(items), classified=sum("category" in m for m in items))
@@ -118,15 +121,18 @@ def run(settings, resume_id=None, reader_factory=None, maintenance=None):
                     with audit.step("excel_generate_verify"):
                         budget.remaining()
                         path = build_report(settings, execution_id, items, list(calendar.loaded.values()),
-                                            started, utcnow(), time.monotonic()-timer)
+                                            started, utcnow(), prior_seconds+time.monotonic()-timer)
                         if settings.require_excel:
                             desktop_excel(settings, path, min(settings.batch_seconds, budget.remaining()))
                             verify_report(path, execution_id, len(items))
                     if calendar.errors or metrics["failed"]:
                         raise RPAError("REPORT_PARTIAL_SEND_BLOCKED")
-                    with audit.step("prepare_send"):
-                        body = render(settings, execution_id, metrics, time.monotonic()-timer)
+                    with audit.step("prepare_send") as outcome:
+                        body = render(settings, execution_id, metrics, prior_seconds+time.monotonic()-timer)
                         send_state = send_report(settings, store, execution_id, path, body, client, token, budget)
+                        if send_state in {"ENVIO_INCIERTO", "ERROR", "PENDIENTE_CUOTA"}:
+                            outcome.update(result='FAILED', code='REPORT_'+send_state)
+                            error = 'REPORT_'+send_state
                     status = "REVIEW" if send_state in {"ENVIO_INCIERTO", "ERROR", "PENDIENTE_CUOTA"} else "COMPLETED"
                     # Resultado durable antes del mantenimiento; su fallo no permite otro envío.
                     store.execute("UPDATE executions SET status=? WHERE id=?", (status, execution_id))
@@ -147,7 +153,7 @@ def run(settings, resume_id=None, reader_factory=None, maintenance=None):
             metrics["queries"] = metrics.get("queries", 0) + (reader.queries if reader else 0)
             metrics["http_queries"] = metrics.get("http_queries", 0) + (http.queries if http else 0)
             metrics["retries"] = metrics.get("retries", 0) + (http.retries if http else 0)
-            metrics["messages_per_second"] = round(metrics.get("processed", 0)/max(metrics["duration_seconds"], .001), 2)
+            metrics["messages_per_second"] = round(metrics.get("processed", 0)/max(metrics["total_active_seconds"], .001), 2)
             result = dict(execution_id=execution_id, status=status, send_state=send_state, error=error,
                           source=settings.source, holiday_mode=settings.holiday_mode, metrics=metrics)
             store.execute("UPDATE executions SET status=?,finished=?,metrics=? WHERE id=?",

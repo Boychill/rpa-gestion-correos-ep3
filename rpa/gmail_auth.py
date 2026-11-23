@@ -97,6 +97,24 @@ def read_token(path):
         raise RPAError('AUTH_REQUIRED') from exc
 
 
+def local_authorization_status(settings, role):
+    """Inspección local sin refrescar, escribir tokens ni afirmar conexión remota."""
+    account = settings.gmail_sender_address if role == 'remitente' else settings.gmail_receiver_address
+    try:
+        config = client_config(settings)
+        data = read_token(token_path(settings,role))
+        info = data.get('credentials',{})
+        if (data.get('role') != role or data.get('declared_account','').lower() != account.lower()
+                or info.get('client_id') != config['installed']['client_id']
+                or set(info.get('scopes',[])) != set(SCOPES[role])):
+            raise RPAError('AUTH_REQUIRED')
+        credentials = Credentials.from_authorized_user_info(info,scopes=SCOPES[role])
+        state = 'LOCAL_VALID' if credentials.valid else 'REFRESH_REQUIRED' if credentials.refresh_token else 'AUTH_REQUIRED'
+    except (RPAError, ValueError, KeyError, TypeError):
+        state = 'AUTH_REQUIRED'
+    return {'role':role,'account':account,'status':state,'remote_checked':False}
+
+
 def refresh(credentials, settings, budget):
     class TimedRequest(Request):
         def __call__(self, *args, **kwargs):

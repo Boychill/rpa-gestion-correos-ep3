@@ -1,0 +1,21 @@
+{
+  "id": 45277726647,
+  "head_sha": "bc1500b2e234906783a9762a3319bb275e7c5752",
+  "status": "completed",
+  "conclusion": "success",
+  "html_url": "https://github.com/Boychill/rpa-gestion-correos-ep3/actions/runs/45277726647",
+  "jobs": [
+    {
+      "id": 138053758448,
+      "name": "Windows \u00b7 Python 3.13",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "id": 138053759052,
+      "name": "Windows \u00b7 Python 3.12",
+      "status": "completed",
+      "conclusion": "success"
+    }
+  ]
+}

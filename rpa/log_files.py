@@ -46,7 +46,7 @@ def save_log(settings, store, records, source="LOCAL", execution_id=None):
 
 
 def save_execution_log(settings, store, execution_id):
-    records = log_records(store, execution_id)
+    records = log_records(store, execution_id, include_context=settings.supabase_context_enabled)
     if not records:
         raise RPAError("EXECUTION_LOG_NOT_READY")
     return save_log(settings, store, records, execution_id=execution_id)

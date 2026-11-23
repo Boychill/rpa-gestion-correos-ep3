@@ -96,14 +96,16 @@ class Audit:
     @contextmanager
     def step(self, name, attempt=1, context=None):
         start, timer = utcnow(), time.monotonic()
+        outcome = {'result': 'OK', 'code': 'OK'}
         try:
-            yield
+            yield outcome
         except Exception as exc:
             self.event(name, start, (time.monotonic()-timer)*1000, attempt, "FAILED",
                        exc.code if isinstance(exc, RPAError) else type(exc).__name__, context=context)
             raise
         else:
-            self.event(name, start, (time.monotonic()-timer)*1000, attempt, context=context)
+            self.event(name, start, (time.monotonic()-timer)*1000, attempt,
+                       result=outcome['result'], code=outcome['code'], context=context)
 
     def close(self):
         for handler in self.logger.handlers:

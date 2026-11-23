@@ -51,6 +51,7 @@ class Settings:
     retention_export_days: int = 7
     analytics_retention_days: int = 90
     supabase_enabled: bool = False
+    supabase_context_enabled: bool = False
     supabase_url: str = ""
     supabase_secret_key: str = field(default="", repr=False)
     log_sync_batch_size: int = 100

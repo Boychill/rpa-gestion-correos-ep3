@@ -48,6 +48,29 @@ def test_supabase_upsert_idempotent_and_private_fields_excluded(cloud, store):
     assert summary["status"] == "COMPLETADO"  # 429 recuperado no convierte la ejecución en fallida.
 
 
+def test_extended_context_is_opt_in_and_survives_download(cloud, store):
+    import uuid
+    cid=str(uuid.uuid4())
+    audit=Audit(store,'test',cloud.runtime/'logs')
+    audit.event('report_delivery',utcnow(),10,result='FAILED',code='REPORT_ENVIO_INCIERTO',
+                context={'dataset':cid,'job_id':cid+':1','role':'remitente','http_status':503,'recovery':'REVIEW_NO_RESEND'})
+    audit.close()
+    legacy=log_records(store)
+    assert all('campaign_id' not in row for row in legacy)
+    s=replace(cloud,supabase_context_enabled=True);sent=[]
+    def handler(request):
+        if request.method=='POST':sent.extend(json.loads(request.content));return httpx.Response(201)
+        assert 'campaign_id' in request.url.params['select']
+        return httpx.Response(200,json=sorted(sent,key=lambda r:r['id']))
+    with httpx.Client(transport=httpx.MockTransport(handler)) as client:
+        assert sync_logs(s,store,client=client)['status']=='SYNCED'
+        records=fetch_cloud_logs(s,store,client=client)
+    row=next(r for r in records if r['step_id']=='report_delivery')
+    assert row['campaign_id']==cid and row['http_status']==503 and row['recovery']=='REVIEW_NO_RESEND'
+    assert row['role']=='remitente' and row['job_id']==cid+':1'
+    assert all(not {'body','subject','sender','token','host'} & set(r) for r in records)
+
+
 def test_three_persistent_attempts_no_loop_or_restart_reset(cloud, store):
     calls = []
     def fail(request):

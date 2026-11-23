@@ -1,0 +1,81 @@
+{
+  "checked_at": "2026-11-23T17:08:54.380698+00:00",
+  "origin": "REAL_GMAIL_AND_SUPABASE",
+  "campaign_id": "ea92521e-301e-4e36-a4df-76b8921f3223",
+  "requested": 3,
+  "accepted": 3,
+  "received": 3,
+  "correct": 3,
+  "duplicates": 0,
+  "categories": {
+    "Información": 1,
+    "Consulta": 1,
+    "Reclamo": 1
+  },
+  "send_invocations": 1,
+  "send_error": null,
+  "mail_sent": true,
+  "report_emailed": false,
+  "started": "2026-11-23T17:07:56.339770+00:00",
+  "finished": "2026-11-23T17:08:14.842971+00:00",
+  "report": {
+    "path": "output/2470152a-22bc-458c-a836-73f08080559f/reporte_pruebas.xlsx",
+    "sha256": "4b54120d35eefe4355f8b2e075837bd4a9f79463f04f6396125226a41c08270a",
+    "sheets": [
+      "Resumen",
+      "Correos",
+      "Referencia_API",
+      "Ejecuciones"
+    ],
+    "rows": 3
+  },
+  "mailbox_locations": {
+    "INBOX": 3,
+    "SPAM": 0,
+    "TRASH": 0
+  },
+  "repeat_analysis": {
+    "status": "NO_CHANGES",
+    "received_unique": 3,
+    "duplicates": 0,
+    "messages_sent": 0
+  },
+  "supabase": [
+    {
+      "execution_id": "574785fb-0bb0-4458-9ad6-c06d1055aa44",
+      "records_verified": 4,
+      "remote_matches_local": true,
+      "download_path": "runtime/logs/descargas/supabase-a867456d-96aa-4864-b753-844557fdea21.log",
+      "sha256": "fc4a80fd8e87b49df679357f796bec7759d5f6b2fed8e27e4d7f28731df7bdf0",
+      "expires": "2026-12-08T17:09:01.161768+00:00"
+    },
+    {
+      "execution_id": "2470152a-22bc-458c-a836-73f08080559f",
+      "records_verified": 18,
+      "remote_matches_local": true,
+      "download_path": "runtime/logs/descargas/supabase-6c79e0e5-f2ed-4f55-bb1f-186b8145012f.log",
+      "sha256": "9a2d83adc30861957f0c7159873df51cf01bf841a4def996f1415810c26a4ece",
+      "expires": "2026-12-08T17:09:01.967091+00:00"
+    },
+    {
+      "execution_id": "12fae46a-7c6d-5627-a276-83de483cf7dc",
+      "records_verified": 4,
+      "remote_matches_local": true,
+      "download_path": "runtime/logs/descargas/supabase-3390927a-f9db-41f9-867f-e5c39ef02ff3.log",
+      "sha256": "9dd822b840b97decaaf33692a5c85ab687148d740a7ecf919e34219fa4164f95",
+      "expires": "2026-12-08T17:09:02.564815+00:00"
+    },
+    {
+      "execution_id": "a232cfdf-98ff-44ea-802a-bb5048661402",
+      "records_verified": 6,
+      "remote_matches_local": true,
+      "download_path": "runtime/logs/descargas/supabase-dc3701a6-3200-4d83-be4b-8317d2e9bc3a.log",
+      "sha256": "c21bf866fe34b4ecc52db7d62f54127073c8b7e83ce98cf1e566feaaa0e29e8a",
+      "expires": "2026-12-08T17:09:03.190428+00:00"
+    }
+  ],
+  "final_campaign_state": {
+    "RECEIVED": 3
+  },
+  "status": "PASSED"
+}

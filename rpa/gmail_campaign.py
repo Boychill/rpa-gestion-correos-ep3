@@ -8,6 +8,7 @@ import base64
 import csv
 import hashlib
 import json
+import math
 import re
 import sqlite3
 import time
@@ -36,25 +37,38 @@ def directory(settings, campaign_id):
     return settings.runtime / 'campaigns' / campaign_id
 
 
-def prepare(settings, sender, recipient, count=500):
-    if not 1 <= count <= 500:
+def prepare(settings, sender, recipient, count=500, *, config=None):
+    if type(count) is not int or not 1 <= count <= 500:
         raise RPAError('CAMPAIGN_COUNT_INVALID')
     for address in (sender, recipient):
         if not re.fullmatch(r'[A-Za-z0-9._%+-]+@gmail\.com', address):
             raise RPAError('CAMPAIGN_GMAIL_ADDRESS_REQUIRED')
     campaign_id, created = str(uuid.uuid4()), utcnow()
     tag = 'RPA-TEST-' + campaign_id
+    scenarios = None
+    if config is not None:
+        from rpa.scenarios import generate
+        config.validate()
+        if config.mode != 'GMAIL' or config.total != count:
+            raise RPAError('CAMPAIGN_CONFIG_MISMATCH')
+        scenarios = generate(config)
     messages = []
     for i in range(count):
         category, subject = EXAMPLES[i % len(EXAMPLES)]
+        if scenarios:
+            category, subject = scenarios[i]['expected_category'], scenarios[i]['subject']
         messages.append(dict(sequence=i+1, expected=category,
             subject=f'[{tag}] {i+1:03d}/{count} {subject}',
             body=f'Mensaje sintético {i+1} de {count} para probar la clasificación RPA.\n'
                  f'Categoría esperada: {category}.\nNo representa una petición ni incidente real.\n'
                  f'Identificador del lote: {campaign_id}\n',
             message_id=f'<rpa.{campaign_id}.{i+1}@gmail.com>'))
+        if scenarios:
+            messages[-1]['scenario'] = scenarios[i]
     manifest = dict(id=campaign_id, created=created, sender=sender.lower(), recipient=recipient.lower(),
                     count=count, tag=tag, expected=dict(Counter(m['expected'] for m in messages)), messages=messages)
+    if config is not None:
+        manifest['test_config'] = config.to_dict()
     folder = directory(settings, campaign_id)
     folder.mkdir(parents=True)
     raw = encode(manifest).encode('utf-8')
@@ -81,9 +95,11 @@ def summary(settings, campaign_id):
     manifest = load(settings, campaign_id)
     with sqlite3.connect(directory(settings, campaign_id) / 'campaign.sqlite3') as db:
         states = dict(db.execute('SELECT state,COUNT(*) FROM deliveries GROUP BY state'))
+        attempted = db.execute('SELECT COUNT(*) FROM deliveries WHERE attempts>0').fetchone()[0]
     accepted = states.get('ACCEPTED', 0) + states.get('RECEIVED', 0)
     return dict(campaign_id=campaign_id, expected=manifest['count'], states=states,
-                accepted=accepted, received=states.get('RECEIVED', 0), all_accepted=accepted==manifest['count'])
+                accepted=accepted, received=states.get('RECEIVED', 0), all_accepted=accepted==manifest['count'],
+                attempted=attempted, review=sum(states.get(k,0) for k in ('UNCERTAIN','BLOCKED','IN_FLIGHT')))
 
 
 def raw_message(manifest, item):
@@ -95,7 +111,7 @@ def raw_message(manifest, item):
     return base64.urlsafe_b64encode(message.as_bytes()).decode('ascii')
 
 
-def send(settings, campaign_id, sender, recipient, client=None, token=None, interval=1.0, execute=False, limit=None, stop_event=None):
+def send(settings, campaign_id, sender, recipient, client=None, token=None, interval=None, execute=False, limit=None, stop_event=None, progress=None):
     manifest = load(settings, campaign_id)
     if (sender.lower(), recipient.lower()) != (manifest['sender'], manifest['recipient']):
         raise RPAError('CAMPAIGN_ACCOUNT_MISMATCH')
@@ -104,7 +120,14 @@ def send(settings, campaign_id, sender, recipient, client=None, token=None, inte
         raise RPAError('CAMPAIGN_ACCOUNT_NOT_ALLOWED')
     if not execute:
         return dict(summary(settings, campaign_id), dry_run=True)
-    if limit is not None and not 1 <= limit <= manifest['count']:
+    controls = manifest.get('test_config', {})
+    interval = controls.get('interval', 1.0) if interval is None else interval
+    limit = controls.get('limit') if limit is None else limit
+    if not isinstance(interval, (int, float)) or not math.isfinite(interval) or not 0 <= interval <= 60:
+        raise RPAError('CAMPAIGN_INTERVAL_INVALID')
+    if interval < 1 and client is None:
+        raise RPAError('CAMPAIGN_INTERVAL_INVALID')
+    if limit is not None and (type(limit) is not int or not 1 <= limit <= manifest['count']):
         raise RPAError('CAMPAIGN_LIMIT_INVALID')
     folder = directory(settings, campaign_id)
     budget, started, timer = Budget(settings.execution_seconds), utcnow(), time.monotonic()
@@ -126,6 +149,8 @@ def send(settings, campaign_id, sender, recipient, client=None, token=None, inte
         error = None
         attempted_now = 0
         retries_now = 0
+        accepted_total = db.execute("SELECT COUNT(*) FROM deliveries WHERE state IN ('ACCEPTED','RECEIVED')").fetchone()[0]
+        attempted_total = db.execute('SELECT COUNT(*) FROM deliveries WHERE attempts>0').fetchone()[0]
         try:
             token = token or authenticate_gmail(replace(settings, mailbox=sender), budget, send=True)
             client = client or httpx.Client(follow_redirects=False)
@@ -146,6 +171,7 @@ def send(settings, campaign_id, sender, recipient, client=None, token=None, inte
                     error = 'CAMPAIGN_ATTEMPTS_EXHAUSTED'
                     break
                 attempt = row['attempts']+1
+                attempted_total += int(row['attempts']==0)
                 attempted_now += 1
                 retries_now += int(attempt > 1)
                 raw = raw_message(manifest, item)
@@ -189,6 +215,10 @@ def send(settings, campaign_id, sender, recipient, client=None, token=None, inte
                 if state != 'ACCEPTED':
                     error = code
                     break
+                if progress:
+                    progress({'stage':'Aceptado por Gmail', 'done':accepted_total+1,
+                              'total':manifest['count'], 'accepted':accepted_total+1, 'attempted':attempted_total})
+                accepted_total += 1
                 if interval:
                     budget.sleep(max(1.0, interval))
         except Exception as exc:
@@ -212,7 +242,7 @@ def send(settings, campaign_id, sender, recipient, client=None, token=None, inte
         return result
 
 
-def analyze(settings, campaign_id):
+def analyze(settings, campaign_id, progress=None):
     from rpa.orchestrator import run
     manifest = load(settings, campaign_id)
     start = datetime.fromisoformat(manifest['created']) - timedelta(days=1)
@@ -232,7 +262,7 @@ def analyze(settings, campaign_id):
     with Store(settings.runtime / 'state.sqlite3', settings.root) as store:
         active = store.row("SELECT id,signature FROM executions WHERE status IN ('RUNNING','PARTIAL') LIMIT 1")
         resume = active['id'] if active and active['signature']==configured.signature else None
-    result = run(configured, resume_id=resume)
+    result = run(configured, resume_id=resume, progress=progress)
     expected = {item['subject']: item['expected'] for item in manifest['messages']}
     with Store(settings.runtime / 'state.sqlite3', settings.root) as store:
         rows = store.rows("SELECT payload,category FROM messages WHERE mailbox=? AND state='CLASSIFIED'",
@@ -271,5 +301,77 @@ def analyze(settings, campaign_id):
             category = actual.get(item['subject'])
             writer.writerow([item['sequence'], item['expected'], category or '',
                              category is not None, category == item['expected']])
+    from rpa.scenario_reports import summarize, export_results
+    scenarios = []
+    for item in manifest['messages']:
+        row = dict(item.get('scenario') or dict(scenario_id=item['message_id'], sequence=item['sequence'],
+            type='normal', special=False, technical=False, expected_category=item['expected'], expected_result='CLASSIFIED'))
+        category = actual.get(item['subject'])
+        row.update(actual_category=category, actual_result='CLASSIFIED' if category else None,
+                   validation='PENDING' if category is None else 'PASSED' if category==item['expected'] else 'FAILED',
+                   failure_reason='CATEGORY_MISMATCH' if category is not None and category!=item['expected'] else None)
+        scenarios.append(row)
+    state = summary(settings,campaign_id)
+    with sqlite3.connect(folder/'campaign.sqlite3') as db:
+        retries = db.execute('SELECT COALESCE(SUM(MAX(0,attempts-1)),0) FROM deliveries').fetchone()[0]
+    with Store(settings.runtime/'state.sqlite3',settings.root) as store:
+        provider_failures = store.row("SELECT COUNT(*) FROM events e JOIN executions x ON e.execution_id=x.id WHERE x.signature=? AND x.source='GMAIL_TEST_SEND' AND e.result='FAILED' AND e.step_id GLOB 'gmail_send_[0-9]*'",(campaign_id,))[0]
+        runs = store.rows("SELECT source,metrics FROM executions WHERE (source='GMAIL_TEST_SEND' AND signature=?) OR (source='GMAIL' AND profile=?)",
+                          (campaign_id,configured.profile))
+        elapsed = 0
+        for row in runs:
+            metrics = json.loads(row['metrics'])
+            elapsed += metrics.get('total_active_seconds',metrics.get('duration_seconds',0))
+            if row['source']=='GMAIL':retries += metrics.get('retries',0)
+    totals = summarize(scenarios, mode='GMAIL', prepared=manifest['count'], accepted=state['accepted'],
+        received=len(actual), classified=len(actual), duration=elapsed,
+        retries=retries, provider_failures=provider_failures, duplicates=duplicates)
+    totals.update(attempted=state['attempted'], review=state['review'])
+    report_folder = settings.output/result['execution_id']
+    base_report = report_folder/'reporte.xlsx'
+    check['scenario_report'] = export_results(folder,totals,scenarios)
+    if base_report.is_file():
+        check['scenario_report'] = export_results(report_folder,totals,scenarios,
+            base_report=base_report,execution_id=result['execution_id'])
     (folder / 'analisis_resultado.json').write_text(encode(check), encoding='utf-8')
     return check
+
+
+def send_preview(settings, campaign_id, *, limit=None, interval=None):
+    manifest = load(settings,campaign_id)
+    controls = manifest.get('test_config',{})
+    limit = controls.get('limit',manifest['count']) if limit is None else limit
+    interval = controls.get('interval',1.0) if interval is None else interval
+    if type(limit) is not int or not 1 <= limit <= manifest['count'] or not math.isfinite(interval) or not 1 <= interval <= 60:
+        raise RPAError('CAMPAIGN_SEND_CONTROLS_INVALID')
+    with sqlite3.connect(directory(settings,campaign_id)/'campaign.sqlite3') as db:
+        rows = db.execute('SELECT state,due,attempts FROM deliveries ORDER BY sequence').fetchall()
+    blocked = any(state in ('UNCERTAIN','BLOCKED','IN_FLIGHT') for state,_,_ in rows)
+    eligible = 0
+    for state,due,attempts in rows:
+        if state in ('ACCEPTED','RECEIVED'):continue
+        if due > time.time() or attempts >= 3:break
+        eligible += 1
+    return dict(summary(settings,campaign_id), sender=manifest['sender'],recipient=manifest['recipient'],
+                to_attempt=0 if blocked else min(limit,eligible), limit=limit, interval=interval,
+                pending=sum(state not in ('ACCEPTED','RECEIVED') for state,_,_ in rows), review_required=blocked)
+
+
+def sender_usage(settings, sender):
+    """Estimación de campañas locales; no consulta ni representa cuota oficial."""
+    ids = []
+    for path in (settings.runtime/'campaigns').glob('*/mensajes.json'):
+        try:
+            manifest = load(settings,path.parent.name)
+            if manifest['sender']==sender.lower():ids.append(manifest['id'])
+        except (OSError,ValueError,RPAError,sqlite3.Error):continue
+    accepted = attempted = 0
+    state = settings.runtime/'state.sqlite3'
+    if state.exists() and ids:
+        with sqlite3.connect(state.resolve().as_uri()+'?mode=ro',uri=True) as db:
+            rows = db.execute("SELECT x.signature,e.result FROM events e JOIN executions x ON e.execution_id=x.id WHERE x.source='GMAIL_TEST_SEND' AND e.step_id GLOB 'gmail_send_[0-9]*' AND e.started>=?",((datetime.now(timezone.utc)-timedelta(hours=24)).isoformat(),)).fetchall()
+        for campaign,result in rows:
+            if campaign in ids:
+                attempted += 1; accepted += result=='OK'
+    return {'window_hours':24,'attempted':attempted,'accepted':accepted,'official_quota':False,
+            'includes_external_sends':False}

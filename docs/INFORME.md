@@ -1,5 +1,7 @@
 # Informe técnico · Robot RPA de gestión de correos EP3
 
+Revisión final del 23/11/2026: **144 pruebas aprobadas**, envío del Excel desde la interfaz con vista previa y confirmación, auditoría ampliada opcional y GitHub Actions en Python 3.12/3.13. Consulta [REVISION_FINAL.md](REVISION_FINAL.md) y [COMO_UTILIZAR.md](../COMO_UTILIZAR.md). La validación inicial de 127 pruebas y las campañas reales se conservan como evidencia histórica en [VALIDACION_2026-11-23.md](VALIDACION_2026-11-23.md). Esta revisión no realizó nuevos envíos.
+
 ## 1. Problema y alcance
 
 La clasificación manual de mensajes y la consolidación de resultados consumen tiempo y dificultan la trazabilidad. El robot implementado lee metadatos de una carpeta autorizada, asigna categorías mediante reglas explícitas, calcula un plazo interno con feriados de Chile y genera un reporte consolidado. El objetivo de demostración es procesar 1.000 mensajes, con mediciones intermedias de 100, 300 y 500.
@@ -54,7 +56,7 @@ Retención inicial: DEBUG 7, INFO 15, ERROR 30, copias descargadas 15, exportaci
 
 ## 8. Validación y límites de las mediciones
 
-La suite cubre reglas, tildes, asunto vacío, prioridad, invalidación, transacciones antes/después del commit, recuperación, deduplicación, tombstones, cambio de año, cobertura ausente, neutralización de fórmulas, plantilla dañada, libro bloqueado en Windows, locks, 429, presupuesto, agotamiento persistente, HTTP 403, contratos de Gmail y compatibilidad Graph simulados, envío incierto, mantenimiento y limpieza segura. Los resultados de la última ejecución están en pytest.xml.
+La suite cubre reglas, tildes, asunto vacío, prioridad, invalidación, transacciones antes/después del commit, recuperación, deduplicación, tombstones, cambio de año, cobertura ausente, neutralización de fórmulas, plantilla dañada, libro bloqueado en Windows, locks, 429, presupuesto, agotamiento persistente, HTTP 403, contratos de Gmail y compatibilidad Graph simulados, envío incierto, mantenimiento y limpieza segura. La versión actual añade los escenarios, la interfaz y el envío del Excel: sus 144 pruebas están en [revision_final_pytest.xml](evidence/revision_final_pytest.xml). Los XML anteriores conservan los resultados históricos de 90, 124 y 127 pruebas.
 
 El benchmark crea estados aislados, genera páginas deterministas, ejecuta el flujo completo sin Office/envío y mide tiempo total, rendimiento, consultas, reintentos, duplicados y memoria de asignaciones Python con tracemalloc. No mide RSS del proceso ni memoria de Office. Las cifras dependen del equipo, almacenamiento, antivirus y cachés; no predicen rendimiento Gmail real. La tabla vigente se incorpora automáticamente al PDF desde benchmark.json.
 

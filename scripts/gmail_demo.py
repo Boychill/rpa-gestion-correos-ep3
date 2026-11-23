@@ -16,6 +16,7 @@ def main():
     p.add_argument('--sender', required=True)
     p.add_argument('--recipient', required=True)
     p.add_argument('--count', type=int, required=True)
+    p.add_argument('--config',type=Path,help='Configuración JSON de escenarios Gmail')
     for command in ('send', 'analyze', 'status', 'run'):
         p = sub.add_parser(command)
         p.add_argument('--campaign', required=True)
@@ -25,10 +26,13 @@ def main():
             p.add_argument('--count', type=int, required=True)
             p.add_argument('--execute', action='store_true', help='Enviar realmente; por defecto solo simulación')
             p.add_argument('--limit', type=int, help='Máximo de mensajes de este lote a intentar en esta invocación')
+            p.add_argument('--interval',type=float,help='Segundos entre envíos, entre 1 y 60')
     args = parser.parse_args()
     settings = Settings.load(Path(__file__).resolve().parents[1])
     if args.command=='prepare':
-        result = prepare(settings, args.sender, args.recipient, args.count)
+        from rpa.scenarios import ScenarioConfig
+        config = ScenarioConfig.from_dict(json.loads(args.config.read_text(encoding='utf-8'))) if args.config else None
+        result = prepare(settings, args.sender, args.recipient, args.count, config=config)
         result.pop('messages')
     elif args.command in ('send', 'run'):
         if load(settings, args.campaign)['count'] != args.count:
@@ -39,7 +43,7 @@ def main():
             from rpa.gmail import authenticate_gmail
             from rpa.runtime import Budget
             authenticate_gmail(replace(settings, mailbox=args.recipient), Budget(240))
-        result = send(settings, args.campaign, args.sender, args.recipient, execute=args.execute, limit=args.limit)
+        result = send(settings, args.campaign, args.sender, args.recipient, execute=args.execute, limit=args.limit,interval=args.interval)
         if args.command=='run' and args.execute and result['accepted']:
             result = {'send': result, 'analysis': analyze(settings, args.campaign)}
     elif args.command=='analyze':

@@ -1,5 +1,5 @@
 {
-  "checked_at": "2026-11-18T16:31:13.556047+00:00",
+  "checked_at": "2026-11-23T06:00:02.709177+00:00",
   "platform": "Windows-10-10.0.19045-SP0",
   "graph": "NO_PROBADO_SIN_BUZON_AUTORIZADO",
   "mail_send": "NO_EJECUTADO",
@@ -14,7 +14,7 @@
       "year": 2027,
       "status": "VERIFICADO",
       "http": 200,
-      "count": 17
+      "count": 19
     }
   ],
   "excel": {
