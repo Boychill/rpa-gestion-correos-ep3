@@ -1,5 +1,7 @@
 # Informe técnico · Robot RPA de gestión de correos EP3
 
+Actualización del 23/11/2026: la aplicación incorpora siete pestañas, escenarios configurables, reportes de pruebas y controles accesibles con mensajes largos. La suite actual aprobó 127 pruebas; se comprobaron escenarios de 12/300/1.000 casos, lectura Gmail y esquema Supabase sin nuevos envíos. El detalle medido y las limitaciones están en [VALIDACION_2026-11-23.md](VALIDACION_2026-11-23.md). Para operar la versión actual, consulta [COMO_UTILIZAR.md](../COMO_UTILIZAR.md). Las mediciones y pruebas reales anteriores se conservan como evidencia histórica.
+
 ## 1. Problema y alcance
 
 La clasificación manual de mensajes y la consolidación de resultados consumen tiempo y dificultan la trazabilidad. El robot implementado lee metadatos de una carpeta autorizada, asigna categorías mediante reglas explícitas, calcula un plazo interno con feriados de Chile y genera un reporte consolidado. El objetivo de demostración es procesar 1.000 mensajes, con mediciones intermedias de 100, 300 y 500.
@@ -54,7 +56,7 @@ Retención inicial: DEBUG 7, INFO 15, ERROR 30, copias descargadas 15, exportaci
 
 ## 8. Validación y límites de las mediciones
 
-La suite cubre reglas, tildes, asunto vacío, prioridad, invalidación, transacciones antes/después del commit, recuperación, deduplicación, tombstones, cambio de año, cobertura ausente, neutralización de fórmulas, plantilla dañada, libro bloqueado en Windows, locks, 429, presupuesto, agotamiento persistente, HTTP 403, contratos de Gmail y compatibilidad Graph simulados, envío incierto, mantenimiento y limpieza segura. Los resultados de la última ejecución están en pytest.xml.
+La suite cubre reglas, tildes, asunto vacío, prioridad, invalidación, transacciones antes/después del commit, recuperación, deduplicación, tombstones, cambio de año, cobertura ausente, neutralización de fórmulas, plantilla dañada, libro bloqueado en Windows, locks, 429, presupuesto, agotamiento persistente, HTTP 403, contratos de Gmail y compatibilidad Graph simulados, envío incierto, mantenimiento y limpieza segura. La versión actual incluye escenarios y disposición de la interfaz: los resultados de sus 127 pruebas están en [validacion_20261123_pytest.xml](evidence/validacion_20261123_pytest.xml). `pytest.xml` conserva la ejecución histórica anterior.
 
 El benchmark crea estados aislados, genera páginas deterministas, ejecuta el flujo completo sin Office/envío y mide tiempo total, rendimiento, consultas, reintentos, duplicados y memoria de asignaciones Python con tracemalloc. No mide RSS del proceso ni memoria de Office. Las cifras dependen del equipo, almacenamiento, antivirus y cachés; no predicen rendimiento Gmail real. La tabla vigente se incorpora automáticamente al PDF desde benchmark.json.
 

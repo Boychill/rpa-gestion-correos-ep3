@@ -2,6 +2,8 @@
 
 Fecha: 22 de noviembre de 2026. Rama de trabajo: `feat/escenarios-presentacion`, basada en `main`.
 
+Revalidación del 23/11/2026: **127 pruebas aprobadas**, incluidos los tres casos nuevos de disposición de controles. Se volvió a ejecutar la simulación desde Tkinter y los presets de 12, 300 y 1.000 casos; también se comprobaron conexiones de lectura sin enviar correos. Consulta [el informe actualizado](VALIDACION_2026-11-23.md) y la nueva [guía de uso](../COMO_UTILIZAR.md). Las cifras de 124 pruebas y 30 archivos protegidos indicadas más adelante corresponden a la entrega original del 22/11.
+
 ## Funcionalidades implementadas
 
 La interfaz existente incorpora siete secciones, modo PRESENTACIÓN, contadores diferenciados, progreso mediante threading y queue, historial, vista previa y confirmación explícita antes de cada tanda Gmail. El tamaño se adapta a la pantalla y los controles principales permanecen visibles.
@@ -30,6 +32,7 @@ Los reportes separan preparados, aceptados, recibidos, clasificados, casos valid
 | `scripts/gmail_demo.py` | Opciones adicionales de configuración e intervalo, compatibles con comandos anteriores |
 | `scripts/escenarios_demo.py` | Nuevo comando para simulación configurable sin red |
 | `tests/test_scenarios.py` | Nuevas pruebas funcionales, de integración con mocks y de confirmación en Tkinter |
+| `tests/test_demo_layout.py` | Regresión de botones visibles, desplazamiento y presentación en tres tamaños de ventana |
 | `README.md`, `docs/DEMO_PRESENTACION.md`, `docs/EXPLICACION_PROYECTO.md`, `docs/GUION_DEMO.md` | Uso, arquitectura actualizada, límites y exposición |
 
 No se añadieron migraciones destructivas ni se cambió el esquema SQLite. Los adaptadores existentes Gmail, Graph, Outlook y Excel siguen cubiertos por la suite previa.

@@ -2,6 +2,10 @@
 
 Proyecto Python para leer metadatos de correo, clasificar seis categorías, calcular plazos con feriados de Chile, producir un Excel y preparar un reporte consolidado. Incluye SQLite, recuperación, auditoría y panel local. **El modo inicial es sintético y DRY_RUN: no envía correos.**
 
+**Para usarlo por primera vez:** [Cómo utilizar el programa](COMO_UTILIZAR.md), con el recorrido por la ventana, simulación, campañas Gmail, reportes, logs y solución de problemas.
+
+**Última validación, 23/11/2026:** 127 pruebas aprobadas; escenarios locales de 12, 300 y 1.000 casos correctos; lectura real de Gmail y esquema Supabase comprobados. No se enviaron correos. Excel/Outlook COM no están disponibles en este equipo. [Resultados y límites](docs/VALIDACION_2026-11-23.md).
+
 Para entender la estructura, reglas de negocio, flujo completo, estados y límites, consulta
 [Funcionamiento y estructura del proyecto](docs/EXPLICACION_PROYECTO.md).
 
@@ -58,6 +62,7 @@ Desde otra carpeta puede invocar `& 'C:\ruta con espacios\RPA\scripts\run.ps1' r
 
 ## Qué está verificado
 
+- Versión actual: [validación del 23/11/2026](docs/VALIDACION_2026-11-23.md), con suite completa, interfaz, escenarios, capacidad y conexiones de lectura. Las evidencias anteriores que siguen son históricas.
 - Flujo sintético completo, pruebas de fallo y capacidad 100/300/500/1.000: `docs/evidence/pytest.xml` y `benchmark.json`.
 - API real de feriados Chile 2026/2027: `docs/evidence/api_CL_*.json`.
 - Excel COM no disponible en el equipo de implementación: `docs/evidence/real_checks.json`.
@@ -68,7 +73,7 @@ Consulte `docs/INFORME.md`, `docs/MATRIZ_EP3.md`, `docs/PRUEBAS_REALES.md` y `do
 
 ## Ejecución, resultados y recuperación
 
-Cada ejecución devuelve un UUID. Los resultados están en `output/<UUID>/`: `reporte.xlsx`, vista previa HTML, manifiesto del adjunto y `resultado.json`. El reporte contiene Resumen, Correos redactados, Referencia_API y Ejecuciones. La plantilla original se conserva.
+Cada ejecución devuelve un UUID. Los resultados del flujo base están en `output/<UUID>/`: `reporte.xlsx`, vista previa HTML, manifiesto del adjunto y `resultado.json`. Las simulaciones de presentación usan `output/presentacion/` y añaden `reporte_pruebas.xlsx`, CSV y JSON de escenarios. Las cuatro hojas se llaman Resumen, Correos, Referencia_API y Ejecuciones; los metadatos privados se redactan en el reporte. La plantilla original se conserva.
 
 ```powershell
 .\scripts\run.ps1 run --count 1000
@@ -108,6 +113,8 @@ Retención inicial: DEBUG 7, INFO 15, ERROR 30 días. Las ejecuciones en revisi�
 La integración guarda tiempo de inicio/fin, duración en milisegundos, estado COMPLETADO/FALLIDO/REVISION, intento y reintentos. Se separa un intento fallido recuperado del resultado final. SQLite conserva la recuperación y la cola si no hay conexión. El panel incorpora botones para sincronizar, guardar logs y descargarlos desde Supabase a `runtime/logs/descargas/`.
 
 Conexión real comprobada el 18/11/2026: 9 registros, lectura/escritura, idempotencia y descarga verificada. Evidencia: `docs/evidence/supabase_real_checks.json`. Para repetir explícitamente esta comprobación: `.\.venv\Scripts\python.exe scripts/verify_supabase.py`. La suite pytest utiliza HTTP simulado y no toma tus credenciales reales para sincronizar.
+
+El 23/11/2026 se volvió a comprobar la lectura del esquema con HTTP 200, sin escribir ni sincronizar la cola operativa. Esta consulta no vuelve a acreditar las pruebas históricas de escritura.
 
 1. Completar `SUPABASE_URL` y `SUPABASE_SECRET_KEY` en `.env` (privado y excluido de Git/ZIP).
 2. Ejecutar `supabase/migrations/202611170001_rpa_logs.sql` en el SQL Editor del proyecto elegido.

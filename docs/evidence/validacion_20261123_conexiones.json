@@ -1,0 +1,27 @@
+{
+  "checked_at": "2026-11-23T06:00:02.867726+00:00",
+  "local_date": "2026-11-23",
+  "timezone": "America/Santiago",
+  "mail_sent": false,
+  "tokens_written": false,
+  "supabase_writes": false,
+  "gmail": {
+    "remitente": {
+      "local_status": "REFRESH_REQUIRED",
+      "remote_refresh": "PASSED",
+      "status": "TOKEN_REFRESH_VERIFIED_SEND_NOT_TESTED"
+    },
+    "receptor": {
+      "local_status": "REFRESH_REQUIRED",
+      "remote_refresh": "PASSED",
+      "identity_verified": true,
+      "list_http": 200,
+      "read_verified": true,
+      "status": "VERIFIED_READ_ONLY"
+    }
+  },
+  "supabase": {
+    "status": "VERIFIED_SCHEMA_READ",
+    "http": 200
+  }
+}

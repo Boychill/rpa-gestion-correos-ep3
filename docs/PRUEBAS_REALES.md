@@ -2,6 +2,8 @@
 
 # Completar las pruebas reales en Windows
 
+Estado al 23/11/2026: se comprobó renovación de tokens de ambos roles Gmail, identidad y lectura del receptor, consulta del esquema Supabase y API pública de feriados. No se enviaron correos ni se probó Graph con un buzón real. Excel y Outlook COM no están registrados en este equipo. Consulta [la validación actual y sus evidencias](VALIDACION_2026-11-23.md); las instrucciones siguientes permiten completar las comprobaciones de Microsoft en otro entorno habilitado.
+
 ## Preparación de una cuenta autorizada
 
 1. Usar un buzón propio de pruebas y una carpeta limitada. Registrar autorización de la cuenta y del único destinatario antes de habilitar envío. No usar una bandeja productiva para la demo.

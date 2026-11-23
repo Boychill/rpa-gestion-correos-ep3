@@ -2,6 +2,8 @@
 
 La ventana se abre con **[Abrir_Demo.cmd](../Abrir_Demo.cmd)**. Las simulaciones funcionan sin conexión y utilizan carpetas aisladas. Una campaña Gmail conserva su historial y exige confirmar cada tanda antes de enviar mensajes reales.
 
+Actualizado el 23/11/2026. Para un recorrido paso a paso desde la primera apertura, consulta [Cómo utilizar el programa](../COMO_UTILIZAR.md). La [validación actual](VALIDACION_2026-11-23.md) reúne las 127 pruebas aprobadas, escenarios locales y comprobaciones reales de lectura.
+
 ## Instalación
 
 En Windows, con Python 3.12 o superior, abre PowerShell en el proyecto:

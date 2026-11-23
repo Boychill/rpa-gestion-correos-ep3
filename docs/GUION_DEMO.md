@@ -22,8 +22,10 @@ Usa Rápida o Carga local, el historial de simulaciones y las evidencias archiva
 
 ## Evidencia que conviene tener abierta
 
+- [Cómo utilizar el programa, paso a paso](../COMO_UTILIZAR.md).
+- [Validación del 23/11/2026: 127 pruebas y conexiones de lectura](VALIDACION_2026-11-23.md).
 - [Guía de operación](DEMO_PRESENTACION.md).
 - [Explicación completa del proyecto](EXPLICACION_PROYECTO.md).
 - `pruebas.json`, `pruebas.csv` y `reporte_pruebas.xlsx` de una simulación reciente.
 - [Resultado real parcial de 1.000](evidence/prueba_1000_gmail.json).
-- `docs/evidence/presentacion_pytest.xml`, generado con las pruebas de esta mejora.
+- `docs/evidence/validacion_20261123_pytest.xml`, generado con la suite completa de la versión actual. `presentacion_pytest.xml` conserva la validación anterior.
