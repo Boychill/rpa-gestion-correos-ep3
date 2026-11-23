@@ -4,7 +4,9 @@ Proyecto Python para leer metadatos de correo, clasificar seis categorías, calc
 
 **Para usarlo por primera vez:** [Cómo utilizar el programa](COMO_UTILIZAR.md), con el recorrido por la ventana, simulación, campañas Gmail, reportes, logs y solución de problemas.
 
-**Última validación, 23/11/2026:** 127 pruebas aprobadas; escenarios locales de 12, 300 y 1.000 casos correctos; lectura real de Gmail y esquema Supabase comprobados. No se enviaron correos. Excel/Outlook COM no están disponibles en este equipo. [Resultados y límites](docs/VALIDACION_2026-11-23.md).
+**Revisión final: 144 pruebas aprobadas.** [Informe de entrega](docs/REVISION_FINAL.md). Incluye envío del Excel desde Reportes con vista previa y confirmación, contadores completos, progreso optimizado, auditoría ampliada opcional y GitHub Actions aprobadas en Windows/Python 3.12 y 3.13. La evidencia vigente de la suite está en `docs/evidence/revision_final_pytest.xml`. Esta fase no realiza nuevos envíos reales.
+
+**Validación inicial del 23/11/2026 (histórica):** 127 pruebas aprobadas; escenarios locales de 12, 300 y 1.000 casos correctos; lectura real de Gmail y esquema Supabase comprobados. En esa fase no se enviaron correos. Excel/Outlook COM no están disponibles en este equipo. [Resultados y límites](docs/VALIDACION_2026-11-23.md).
 
 **Prueba real posterior, autorizada el mismo día:** 3 correos enviados, recibidos en la bandeja de entrada y clasificados correctamente; reporte Excel verificado, análisis repetido sin duplicados y 32 registros de auditoría comprobados en Supabase. [Evidencia del envío real](docs/evidence/prueba_real_3_20261123.json).
 

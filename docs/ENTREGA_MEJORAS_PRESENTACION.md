@@ -2,6 +2,8 @@
 
 Fecha: 22 de noviembre de 2026. Rama de trabajo: `feat/escenarios-presentacion`, basada en `main`.
 
+**Cierre de entrega:** [REVISION_FINAL.md](REVISION_FINAL.md) documenta el envío del Excel integrado en la ventana, las nuevas regresiones, GitHub Actions y la regeneración de entregables. Los resultados de 124/127 pruebas de este documento corresponden a revisiones anteriores; la suite vigente se registra en `evidence/revision_final_pytest.xml`.
+
 Revalidación del 23/11/2026: **127 pruebas aprobadas**, incluidos los tres casos nuevos de disposición de controles. Se volvió a ejecutar la simulación desde Tkinter y los presets de 12, 300 y 1.000 casos; también se comprobaron conexiones de lectura sin enviar correos. Consulta [el informe actualizado](VALIDACION_2026-11-23.md) y la nueva [guía de uso](../COMO_UTILIZAR.md). Las cifras de 124 pruebas y 30 archivos protegidos indicadas más adelante corresponden a la entrega original del 22/11.
 
 ## Funcionalidades implementadas
@@ -88,4 +90,4 @@ Los comandos anteriores del robot siguen disponibles. La [guía de demostración
 - El estado OAuth de Inicio es una inspección local. El servidor puede haber revocado un token y solo se comprueba al utilizar el servicio.
 - Excel de escritorio sigue dependiendo de su instalación; el reporte se genera con openpyxl.
 - La suite muestra un aviso de deprecación de una dependencia existente. No se actualizó el conjunto de dependencias dentro de este cambio.
-- Los PDF y PPTX ya presentes en `dist/` son entregables anteriores; este cambio actualiza código y documentación fuente, incluido el guion, sin presentar esos binarios como regenerados.
+- Los PDF/PPTX originales quedaron pendientes en esta primera entrega; la revisión final los regenera junto con el ZIP desde las fuentes actualizadas.

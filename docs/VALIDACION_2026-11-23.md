@@ -1,5 +1,7 @@
 # Validación del proyecto · 23 de noviembre de 2026
 
+Este documento conserva las pruebas históricas de la jornada. La revisión final posterior, sin nuevos envíos, está en [REVISION_FINAL.md](REVISION_FINAL.md); su suite completa figura en `evidence/revision_final_pytest.xml` y sustituye a las 127 pruebas como referencia de la versión actual.
+
 Fecha local: 23/11/2026, America/Santiago. Entorno: Windows, Python 3.13.14. En la primera fase se validaron código, dependencias, interfaz, escenarios, capacidad local y conexiones de lectura sin enviar correos. Posteriormente, a petición del usuario, se realizaron pruebas reales de tres y 300 mensajes. No se reanudaron las campañas históricas pendientes.
 
 ## Prueba real de 300 correos
@@ -99,7 +101,7 @@ Evidencia: [conexiones](evidence/validacion_20261123_conexiones.json), [Office y
 
 ## Uso de estos resultados
 
-Para operar el programa consulta [COMO_UTILIZAR.md](../COMO_UTILIZAR.md). Las campañas históricas de Gmail mantienen sus propios resultados; las pruebas locales de 1.000 casos no significan que se hayan enviado o recibido 1.000 correos reales hoy. Los PDF/PPTX históricos de `dist/` no se regeneraron: la documentación actualizada se encuentra en los archivos Markdown del repositorio.
+Para operar el programa consulta [COMO_UTILIZAR.md](../COMO_UTILIZAR.md). Las campañas históricas de Gmail mantienen sus propios resultados; las pruebas locales de 1.000 casos no significan que se hayan enviado o recibido 1.000 correos reales hoy. Esta fase inicial no regeneró PDF/PPTX; su regeneración se incorpora posteriormente en la revisión final.
 
 Para repetir la suite:
 

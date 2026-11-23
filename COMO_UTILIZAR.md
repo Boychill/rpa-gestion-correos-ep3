@@ -100,6 +100,20 @@ Las simulaciones se guardan bajo `output/presentacion/` y su estado bajo `runtim
 
 El XLSX se genera aunque no haya Excel de escritorio instalado. Para abrirlo necesitas un programa compatible. La automatización específica de Excel COM es una comprobación adicional y no está disponible en el equipo validado.
 
+## 6.1. Preparar y enviar el Excel desde la ventana
+
+El envío del reporte es independiente de los mensajes de prueba. En **6 Reportes**:
+
+1. Para una campaña ya recibida y analizada, pulsa **Generar Excel de la campaña seleccionada**. También puedes elegir una ejecución ya disponible en la lista.
+2. Escribe el destinatario del Excel. Debe estar autorizado en `ALLOWED_RECIPIENTS`; la aplicación no modifica esa lista.
+3. Pulsa **Comprobar adjunto y ver correo**. Revisa archivo, tamaño, hash, destinatario, asunto y contenido de la vista previa.
+4. Para dejarlo preparado, detente aquí. Para enviarlo, pulsa **Confirmar envío del Excel por Gmail** y revisa la confirmación. Cancelar no envía.
+5. El estado **aceptado por Gmail** no confirma recepción. Los resultados inciertos no se repiten automáticamente; la entrega confirmada exige evidencia mediante la reconciliación existente.
+
+Se adjunta el `reporte.xlsx` original validado, no la copia de escenarios. Los reportes locales pueden previsualizarse sin internet, pero no enviarse desde este flujo. Cambiar la selección o el destinatario invalida la vista previa. Generar un consolidado Gmail puede necesitar feriados reales o caché; no es necesario para la demostración local.
+
+La [revisión final](docs/REVISION_FINAL.md) describe pruebas, CI, entrega y límites actuales.
+
 ## 7. Consultar logs, Supabase y limpieza
 
 **Consultar logs** abre la carpeta correspondiente. **7 Auditoría** permite consultar el estado local o sincronizar con Supabase. **Estado de Supabase** muestra información local; el éxito de una sincronización o consulta remota es la comprobación de conexión.

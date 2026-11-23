@@ -45,6 +45,10 @@ Se borran solo archivos registrados y no modificados, o logs rotativos reconocid
 
 ## Verificación
 
+### Contexto ampliado compatible
+
+La revisión final añade una opción desactivada por defecto: `SUPABASE_CONTEXT_ENABLED`. Para usarla, ejecuta primero `supabase/migrations/202611230001_log_context.sql` en tu proyecto y después establece `SUPABASE_CONTEXT_ENABLED=true`. Añade campaña, trabajo, rol, HTTP y recuperación sin borrar filas ni cambiar políticas. Está probado con mocks; la migración no se aplicó al servicio real durante esta revisión. Mantén la opción desactivada si aún utilizas la tabla original. El contexto completo sigue registrado localmente en `event_context` y los logs de auditoría.
+
 El 23/11/2026 se comprobó nuevamente el acceso al esquema `rpa_logs` con HTTP 200 mediante un GET de las columnas esperadas y límite cero. No se escribieron filas ni se procesó la cola de producción en esta comprobación. Evidencia: [validacion_20261123_conexiones.json](evidence/validacion_20261123_conexiones.json). El [informe actual](VALIDACION_2026-11-23.md) separa esta lectura de las pruebas de escritura históricas y los ensayos con mocks.
 
 Conexión real verificada el 18 de noviembre de 2026: lectura de esquema HTTP 200, 9 registros locales coincidentes con los remotos, upsert repetido sin duplicados, segunda sincronización sin peticiones, descarga validada por contenido/hash y acceso sin clave rechazado con HTTP 401. Evidencia sanitizada: `docs/evidence/supabase_real_checks.json`. No se enviaron correos. El rechazo sin clave es una comprobación de acceso API y no una auditoría completa de las políticas RLS.

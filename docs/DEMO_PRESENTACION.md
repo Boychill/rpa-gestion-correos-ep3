@@ -115,6 +115,8 @@ Para enviar el resto de una campaña usa la misma campaña en Envío. Los mensaj
 
 ## Excel y exportaciones
 
+La sección Reportes permite generar el consolidado de una campaña completa o seleccionar un reporte existente por ejecución. Escribe el destinatario autorizado, pulsa **Comprobar adjunto y ver correo** y revisa archivo, tamaño, hash y contenido. **Confirmar envío del Excel por Gmail** abre una segunda confirmación explícita. Los reportes locales solo se previsualizan; los archivos modificados y los envíos inciertos quedan bloqueados. Cancelar no envía. El estado aceptado por Gmail no demuestra entrega; la reconciliación con evidencia sigue siendo independiente. Detalle y validación: [REVISION_FINAL.md](REVISION_FINAL.md).
+
 El archivo original `reporte.xlsx` y su manifiesto se conservan. El nuevo `reporte_pruebas.xlsx` mantiene Resumen, Correos, Referencia_API y Ejecuciones y agrega métricas y detalle de escenarios dentro de Resumen. No modifica un adjunto ya preparado o enviado.
 
 `pruebas.json` y `pruebas.csv` contienen ID de escenario, tipo, categoría y resultado esperados, resultado obtenido, validación y motivo de fallo. No incluyen asuntos, direcciones ni credenciales. Los contadores separan normales, especiales, especiales comprobados, fallos técnicos simulados, fallos reales de envío/proveedor, duplicados y reintentos.
@@ -122,6 +124,8 @@ El archivo original `reporte.xlsx` y su manifiesto se conservan. El nuevo `repor
 En Gmail, el tiempo acumulado suma las ejecuciones de envío y análisis de esa campaña. En simulación incluye lectura y comprobación de casos. El promedio divide ese tiempo por los casos ya validados, sin incluir los pendientes en el denominador. No es una medición del tiempo de tránsito de cada correo en Gmail.
 
 ## Logs y Supabase
+
+Los resultados muestran intentados, revisión, duplicados y errores esperados/inésperados además de los contadores anteriores. Las ejecuciones históricas sin esos datos se identifican como no registrados. El esquema remoto ampliado requiere la migración `202611230001_log_context.sql` y `SUPABASE_CONTEXT_ENABLED=true`; por defecto se conserva el esquema anterior. No se cambia el `.env` del usuario al actualizar el programa.
 
 Abre los logs desde la ventana o utiliza:
 

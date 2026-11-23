@@ -1,4 +1,4 @@
-"""Preparar o enviar una copia del consolidado mediante la misma l?gica que la interfaz."""
+"""Preparar o enviar una copia del consolidado mediante la misma lógica que la interfaz."""
 from pathlib import Path
 import argparse
 import json

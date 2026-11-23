@@ -322,6 +322,8 @@ Comandos de consulta y soporte, desde la raíz del proyecto:
 
 ## Pruebas y estado comprobado
 
+La revisión final incorpora 144 pruebas, envío de Excel desde Reportes con outbox y confirmación, auditoría ampliada opcional y GitHub Actions. [Detalle y límites](REVISION_FINAL.md).
+
 La evidencia describe ejecuciones concretas; no garantiza que la red, los permisos o las cuotas sigan disponibles en una presentación posterior.
 
 | Comprobación registrada | Resultado | Evidencia |

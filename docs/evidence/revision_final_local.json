@@ -1,0 +1,228 @@
+{
+  "checked_at": "2026-11-23T22:11:22.244032+00:00",
+  "local_date": "2026-11-23",
+  "timezone": "America/Santiago",
+  "python": "3.13.14",
+  "real_network": false,
+  "mail_sent": false,
+  "scenarios": [
+    {
+      "preset": "quick",
+      "summary": {
+        "mode": "SIMULATION",
+        "configured": 12,
+        "prepared": 12,
+        "accepted": 0,
+        "received": 0,
+        "classified": 12,
+        "normal": 9,
+        "special": 3,
+        "special_validated": 3,
+        "special_pending": 0,
+        "passed": 12,
+        "failed": 0,
+        "pending": 0,
+        "unexpected_errors": 0,
+        "simulated_technical": 0,
+        "expected_errors": 0,
+        "attempted": 0,
+        "review": 0,
+        "real_provider_failures": 0,
+        "duplicates": 0,
+        "retries": 0,
+        "duration_seconds": 1.3877,
+        "average_seconds": 0.115645,
+        "checked_at": "2026-11-23T22:11:23.635708+00:00"
+      },
+      "verified_artifacts_cumulative": 8
+    },
+    {
+      "preset": "load",
+      "summary": {
+        "mode": "SIMULATION",
+        "configured": 300,
+        "prepared": 300,
+        "accepted": 0,
+        "received": 0,
+        "classified": 260,
+        "normal": 240,
+        "special": 60,
+        "special_validated": 60,
+        "special_pending": 0,
+        "passed": 300,
+        "failed": 0,
+        "pending": 0,
+        "unexpected_errors": 0,
+        "simulated_technical": 40,
+        "expected_errors": 40,
+        "attempted": 0,
+        "review": 0,
+        "real_provider_failures": 0,
+        "duplicates": 4,
+        "retries": 32,
+        "duration_seconds": 3.6547,
+        "average_seconds": 0.012182,
+        "checked_at": "2026-11-23T22:11:27.697890+00:00"
+      },
+      "verified_artifacts_cumulative": 16
+    },
+    {
+      "preset": "stress",
+      "summary": {
+        "mode": "SIMULATION",
+        "configured": 1000,
+        "prepared": 1000,
+        "accepted": 0,
+        "received": 0,
+        "classified": 870,
+        "normal": 800,
+        "special": 200,
+        "special_validated": 200,
+        "special_pending": 0,
+        "passed": 1000,
+        "failed": 0,
+        "pending": 0,
+        "unexpected_errors": 0,
+        "simulated_technical": 130,
+        "expected_errors": 130,
+        "attempted": 0,
+        "review": 0,
+        "real_provider_failures": 0,
+        "duplicates": 13,
+        "retries": 104,
+        "duration_seconds": 8.5188,
+        "average_seconds": 0.008519,
+        "checked_at": "2026-11-23T22:11:37.273623+00:00"
+      },
+      "verified_artifacts_cumulative": 24
+    }
+  ],
+  "capacity": [
+    {
+      "count": 100,
+      "seconds": 1.202,
+      "classified": 100,
+      "send_state": "DRY_RUN",
+      "status": "COMPLETED"
+    },
+    {
+      "count": 300,
+      "seconds": 1.483,
+      "classified": 300,
+      "send_state": "DRY_RUN",
+      "status": "COMPLETED"
+    },
+    {
+      "count": 500,
+      "seconds": 1.944,
+      "classified": 500,
+      "send_state": "DRY_RUN",
+      "status": "COMPLETED"
+    },
+    {
+      "count": 1000,
+      "seconds": 2.914,
+      "classified": 1000,
+      "send_state": "DRY_RUN",
+      "status": "COMPLETED"
+    }
+  ],
+  "artifacts": [
+    {
+      "path": "output\\review_final_local\\presentacion\\ea99e7d4cdbb45e6b5bfe8dd98912614\\0ba11942-6a7c-44c1-8bd9-308c76a7b33c\\adjunto_manifest.json",
+      "sha256": "ade2fa5f29d47de57c7b1cc94a4e927d061b0fc2703c5ca4749fa477ba6121c4"
+    },
+    {
+      "path": "output\\review_final_local\\presentacion\\ea99e7d4cdbb45e6b5bfe8dd98912614\\0ba11942-6a7c-44c1-8bd9-308c76a7b33c\\configuracion_prueba.json",
+      "sha256": "7fc46446eb2fccb886a277b4397a11658b95827b009d1d29733c1bf5ce85b30e"
+    },
+    {
+      "path": "output\\review_final_local\\presentacion\\ea99e7d4cdbb45e6b5bfe8dd98912614\\0ba11942-6a7c-44c1-8bd9-308c76a7b33c\\correo_reporte.html",
+      "sha256": "f4a0c0a6a47a9bbc98ef7baf475cf75977b1ad6db8c412c05525505592101fcf"
+    },
+    {
+      "path": "output\\review_final_local\\presentacion\\ea99e7d4cdbb45e6b5bfe8dd98912614\\0ba11942-6a7c-44c1-8bd9-308c76a7b33c\\pruebas.csv",
+      "sha256": "6b8dc57024c8a4896e75fe1660521d95269c7bba379719689c7f2a6a7358ebb4"
+    },
+    {
+      "path": "output\\review_final_local\\presentacion\\ea99e7d4cdbb45e6b5bfe8dd98912614\\0ba11942-6a7c-44c1-8bd9-308c76a7b33c\\pruebas.json",
+      "sha256": "ec73a680cc57c27331bc84ad24c1379a816367945812acc935de437756c71b22"
+    },
+    {
+      "path": "output\\review_final_local\\presentacion\\ea99e7d4cdbb45e6b5bfe8dd98912614\\0ba11942-6a7c-44c1-8bd9-308c76a7b33c\\reporte.xlsx",
+      "sha256": "fe444c60e61f53dce03e03f14fd69a1b3489bfe36a16a0504dc09f42c163d8ee"
+    },
+    {
+      "path": "output\\review_final_local\\presentacion\\ea99e7d4cdbb45e6b5bfe8dd98912614\\0ba11942-6a7c-44c1-8bd9-308c76a7b33c\\reporte_pruebas.xlsx",
+      "sha256": "2e3190a32e022371ce08dfa4ef496270e77d3185977f4ad2d79c05cca531eb8f"
+    },
+    {
+      "path": "output\\review_final_local\\presentacion\\ea99e7d4cdbb45e6b5bfe8dd98912614\\0ba11942-6a7c-44c1-8bd9-308c76a7b33c\\resultado.json",
+      "sha256": "0395c28bbae8c98acee7d938f1d768e55cfa28093cbee2df837f466cb90811bd"
+    },
+    {
+      "path": "output\\review_final_local\\presentacion\\364cc2214fd64d9cb22d7ca680faf506\\851712df-c91d-44c7-b33c-7338fb1b0a2b\\adjunto_manifest.json",
+      "sha256": "8749198e0b00941689cd90aa9fad8c0ef6d89b2e9a4490ef22e8ab7b187754c1"
+    },
+    {
+      "path": "output\\review_final_local\\presentacion\\364cc2214fd64d9cb22d7ca680faf506\\851712df-c91d-44c7-b33c-7338fb1b0a2b\\configuracion_prueba.json",
+      "sha256": "e53a58bb29c2affdab704a66c1e48b6fd9b3032bebd9036887a379775747d241"
+    },
+    {
+      "path": "output\\review_final_local\\presentacion\\364cc2214fd64d9cb22d7ca680faf506\\851712df-c91d-44c7-b33c-7338fb1b0a2b\\correo_reporte.html",
+      "sha256": "f0ef6738ec938ff855f60b6fab519804d3658d9891e75a068009ba669f0dfe1d"
+    },
+    {
+      "path": "output\\review_final_local\\presentacion\\364cc2214fd64d9cb22d7ca680faf506\\851712df-c91d-44c7-b33c-7338fb1b0a2b\\pruebas.csv",
+      "sha256": "e7ed2929b966ca3dfa57ebfb6eb868acab7c4aa3106b6151356656381febdb34"
+    },
+    {
+      "path": "output\\review_final_local\\presentacion\\364cc2214fd64d9cb22d7ca680faf506\\851712df-c91d-44c7-b33c-7338fb1b0a2b\\pruebas.json",
+      "sha256": "c9e5c9598317fa8c6e0b2fe6482724ccbe37547fb438908916b2234ced6a83d2"
+    },
+    {
+      "path": "output\\review_final_local\\presentacion\\364cc2214fd64d9cb22d7ca680faf506\\851712df-c91d-44c7-b33c-7338fb1b0a2b\\reporte.xlsx",
+      "sha256": "f3534705c623ebed92096db085528865a031758a6396a6dcddac7fc6ed1515df"
+    },
+    {
+      "path": "output\\review_final_local\\presentacion\\364cc2214fd64d9cb22d7ca680faf506\\851712df-c91d-44c7-b33c-7338fb1b0a2b\\reporte_pruebas.xlsx",
+      "sha256": "9e45d1d6103dafdff5caa6d4e0bfa7da676bbe7289698317f00bcaab52def9fc"
+    },
+    {
+      "path": "output\\review_final_local\\presentacion\\364cc2214fd64d9cb22d7ca680faf506\\851712df-c91d-44c7-b33c-7338fb1b0a2b\\resultado.json",
+      "sha256": "a37d96dd381cc0022cf92d5b8de606cbb749887674b6965f59d83b9c31d5ed8e"
+    },
+    {
+      "path": "output\\review_final_local\\presentacion\\13616b060698434fa0478e72eba5e1de\\80b2d244-be12-46d4-affd-73f4f80e2c5c\\adjunto_manifest.json",
+      "sha256": "bc2ddff57179879a5746a154ea8ae28647c0ed83ec7b40487be7efd0a4da4dde"
+    },
+    {
+      "path": "output\\review_final_local\\presentacion\\13616b060698434fa0478e72eba5e1de\\80b2d244-be12-46d4-affd-73f4f80e2c5c\\configuracion_prueba.json",
+      "sha256": "19cc1261a4e70d5566eecaad375f2c65e24a61fe4ecdec40180cf50e9580ec2d"
+    },
+    {
+      "path": "output\\review_final_local\\presentacion\\13616b060698434fa0478e72eba5e1de\\80b2d244-be12-46d4-affd-73f4f80e2c5c\\correo_reporte.html",
+      "sha256": "e7155f68845cbdd9d73d70302fee38f0d12e766623bc02691a1c696bb52f75f0"
+    },
+    {
+      "path": "output\\review_final_local\\presentacion\\13616b060698434fa0478e72eba5e1de\\80b2d244-be12-46d4-affd-73f4f80e2c5c\\pruebas.csv",
+      "sha256": "0ea940daa63fef32fc0b73015cc0567298e2ebbc34845fbdb2a2783a17cb46b5"
+    },
+    {
+      "path": "output\\review_final_local\\presentacion\\13616b060698434fa0478e72eba5e1de\\80b2d244-be12-46d4-affd-73f4f80e2c5c\\pruebas.json",
+      "sha256": "11c001a6687e22a0c3e60f4c537b6dc7480df38b12c8e06be118f2f38b22ad49"
+    },
+    {
+      "path": "output\\review_final_local\\presentacion\\13616b060698434fa0478e72eba5e1de\\80b2d244-be12-46d4-affd-73f4f80e2c5c\\reporte.xlsx",
+      "sha256": "d2fad8c6bd4fdae9131e492c8c2c77f6e6f2dd4f05e8e759f51071955c64a938"
+    },
+    {
+      "path": "output\\review_final_local\\presentacion\\13616b060698434fa0478e72eba5e1de\\80b2d244-be12-46d4-affd-73f4f80e2c5c\\reporte_pruebas.xlsx",
+      "sha256": "878b8cbec3ac227ec49389c0d169b1745762fd14bb41a0184a09e0add733f670"
+    },
+    {
+      "path": "output\\review_final_local\\presentacion\\13616b060698434fa0478e72eba5e1de\\80b2d244-be12-46d4-affd-73f4f80e2c5c\\resultado.json",
+      "sha256": "49a60f2bc868c2a9a25a7958fce975871702d6b0032937b6ceb5b7aac33e91e1"
+    }
+  ]
+}
