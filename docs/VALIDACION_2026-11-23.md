@@ -1,6 +1,26 @@
 # Validación del proyecto · 23 de noviembre de 2026
 
-Fecha local: 23/11/2026, America/Santiago. Entorno: Windows, Python 3.13.14. En la primera fase se validaron código, dependencias, interfaz, escenarios, capacidad local y conexiones de lectura sin enviar correos. Posteriormente, a petición del usuario, se realizó la prueba real de tres mensajes descrita a continuación. No se reanudaron las campañas históricas pendientes.
+Fecha local: 23/11/2026, America/Santiago. Entorno: Windows, Python 3.13.14. En la primera fase se validaron código, dependencias, interfaz, escenarios, capacidad local y conexiones de lectura sin enviar correos. Posteriormente, a petición del usuario, se realizaron pruebas reales de tres y 300 mensajes. No se reanudaron las campañas históricas pendientes.
+
+## Prueba real de 300 correos
+
+Entre las 14:11:29 y 14:20:20 de Santiago se completó la campaña `a69d478d-5a01-42f0-8f2e-fadf4ccdf366`, con 240 mensajes normales y 60 especiales de contenido. Se realizó una única invocación de envío, con un segundo de pausa entre mensajes; no hubo errores de proveedor ni reintentos.
+
+| Comprobación | Resultado |
+| --- | --- |
+| Preparados, aceptados y recibidos | 300 en cada etapa |
+| Ubicación en el receptor | 248 en Recibidos, 52 en Spam, 0 en Papelera |
+| Clasificados correctamente | 300 de 300 |
+| Casos especiales validados | 60 de 60, con 12 por cada tipo de contenido |
+| Pendientes, fallidos y duplicados | 0 |
+| Repetición del análisis | NO_CHANGES; sin nuevos envíos ni duplicados |
+| Excel | Cuatro hojas, 300 filas de correos, apertura y hash comprobados |
+| Supabase | 634 registros de cuatro ejecuciones comprobados contra SQLite |
+| Descargas | Cuatro logs con contenido/hash verificado y vencimiento registrado a 15 días |
+
+Categorías obtenidas: Solicitud 39, Consulta 54, Reclamo 51, Urgente 54, Información 50 y Otros 52. Los mensajes de Spam se incluyeron en la lectura de esta campaña sin moverlos. El flujo tardó aproximadamente 8 minutos y 51 segundos, incluyendo envío, recepción, clasificación y reportes.
+
+Reporte local: `output/13f8bda9-1966-49d9-b346-3a87852c6843/reporte_pruebas.xlsx`. No se envió el Excel como adjunto. Evidencia: [prueba_real_300_20261123.json](evidence/prueba_real_300_20261123.json).
 
 ## Prueba real posterior: envío, recepción, análisis y Supabase
 

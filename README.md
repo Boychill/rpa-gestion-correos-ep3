@@ -8,6 +8,8 @@ Proyecto Python para leer metadatos de correo, clasificar seis categorías, calc
 
 **Prueba real posterior, autorizada el mismo día:** 3 correos enviados, recibidos en la bandeja de entrada y clasificados correctamente; reporte Excel verificado, análisis repetido sin duplicados y 32 registros de auditoría comprobados en Supabase. [Evidencia del envío real](docs/evidence/prueba_real_3_20261123.json).
 
+**Prueba real de 300 correos:** 300 enviados, recibidos y clasificados correctamente; 248 en Recibidos y 52 en Spam. Los 60 escenarios especiales se validaron, sin duplicados ni reintentos; se verificaron el Excel y 634 registros en Supabase. [Evidencia del lote de 300](docs/evidence/prueba_real_300_20261123.json).
+
 Para entender la estructura, reglas de negocio, flujo completo, estados y límites, consulta
 [Funcionamiento y estructura del proyecto](docs/EXPLICACION_PROYECTO.md).
 

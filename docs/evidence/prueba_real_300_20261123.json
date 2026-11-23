@@ -1,0 +1,107 @@
+{
+  "checked_at": "2026-11-23T17:20:39.087445+00:00",
+  "origin": "REAL_GMAIL_AND_SUPABASE",
+  "campaign_id": "a69d478d-5a01-42f0-8f2e-fadf4ccdf366",
+  "requested": 300,
+  "accepted": 300,
+  "received": 300,
+  "correct": 300,
+  "duplicates": 0,
+  "categories": {
+    "Solicitud": 39,
+    "Consulta": 54,
+    "Reclamo": 51,
+    "Urgente": 54,
+    "Información": 50,
+    "Otros": 52
+  },
+  "send_invocations": 1,
+  "send_error": null,
+  "mail_sent": true,
+  "report_emailed": false,
+  "started": "2026-11-23T17:11:29.208470+00:00",
+  "finished": "2026-11-23T17:20:20.537345+00:00",
+  "report": {
+    "path": "output/13f8bda9-1966-49d9-b346-3a87852c6843/reporte_pruebas.xlsx",
+    "sha256": "7cb4ed530df15d4a1a9ea25a2c615bfcf2653994b34d715299414c8c924cb00b",
+    "sheets": [
+      "Resumen",
+      "Correos",
+      "Referencia_API",
+      "Ejecuciones"
+    ],
+    "rows": 300
+  },
+  "mailbox_locations": {
+    "INBOX": 248,
+    "SPAM": 52,
+    "TRASH": 0
+  },
+  "scenarios": {
+    "mode": "GMAIL",
+    "configured": 300,
+    "prepared": 300,
+    "accepted": 300,
+    "received": 300,
+    "classified": 300,
+    "normal": 240,
+    "special": 60,
+    "special_validated": 60,
+    "special_pending": 0,
+    "passed": 300,
+    "failed": 0,
+    "pending": 0,
+    "unexpected_errors": 0,
+    "simulated_technical": 0,
+    "real_provider_failures": 0,
+    "duplicates": 0,
+    "retries": 0,
+    "duration_seconds": 522.8969,
+    "average_seconds": 1.74299,
+    "checked_at": "2026-11-23T17:20:18.534848+00:00"
+  },
+  "repeat_analysis": {
+    "status": "NO_CHANGES",
+    "received_unique": 300,
+    "duplicates": 0,
+    "messages_sent": 0
+  },
+  "supabase": [
+    {
+      "execution_id": "e0831be1-6f71-4dd1-a92d-6e3b7f9afd81",
+      "records_verified": 301,
+      "remote_matches_local": true,
+      "download_path": "runtime/logs/descargas/supabase-db134bb6-2306-4830-bfe9-93a02f290679.log",
+      "sha256": "9b885e0db637631bc86542b2c08c98eab7a0fa23acbb9b28ca3dd7d4a80069ad",
+      "expires": "2026-12-08T17:20:44.036164+00:00"
+    },
+    {
+      "execution_id": "13f8bda9-1966-49d9-b346-3a87852c6843",
+      "records_verified": 323,
+      "remote_matches_local": true,
+      "download_path": "runtime/logs/descargas/supabase-a20ebfd3-bbe5-4e91-ae4c-e9c4af84fd23.log",
+      "sha256": "a23906ecb26297d0a4ec3e8ce87cce2e96772cf972144bc1304264cdd54c5b5a",
+      "expires": "2026-12-08T17:20:45.218591+00:00"
+    },
+    {
+      "execution_id": "9aea8095-cc09-5813-b9e6-b6c7ea1613b0",
+      "records_verified": 4,
+      "remote_matches_local": true,
+      "download_path": "runtime/logs/descargas/supabase-cbfe8334-673b-468a-b252-61c4f367f052.log",
+      "sha256": "4e7bbb5eaf25f89ae71b0659323cdd5a5f5585cf70ffd1f859b3ca914d14d18d",
+      "expires": "2026-12-08T17:20:46.038540+00:00"
+    },
+    {
+      "execution_id": "91ddd266-40f7-4362-ba55-eea1f70c8465",
+      "records_verified": 6,
+      "remote_matches_local": true,
+      "download_path": "runtime/logs/descargas/supabase-d073c4a5-bd15-4a99-b9c8-2693715d8429.log",
+      "sha256": "256e9dffcd20ed50e1beb9640ccc58da2888db048592d3b0763e26f18592ada2",
+      "expires": "2026-12-08T17:20:46.635075+00:00"
+    }
+  ],
+  "final_campaign_state": {
+    "RECEIVED": 300
+  },
+  "status": "PASSED"
+}
