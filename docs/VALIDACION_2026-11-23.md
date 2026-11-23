@@ -1,6 +1,25 @@
 # Validación del proyecto · 23 de noviembre de 2026
 
-Fecha local: 23/11/2026, America/Santiago. Entorno: Windows, Python 3.13.14. Se validaron código, dependencias, interfaz, escenarios, capacidad local y conexiones de lectura. No se enviaron correos reales ni se reanudaron campañas pendientes.
+Fecha local: 23/11/2026, America/Santiago. Entorno: Windows, Python 3.13.14. En la primera fase se validaron código, dependencias, interfaz, escenarios, capacidad local y conexiones de lectura sin enviar correos. Posteriormente, a petición del usuario, se realizó la prueba real de tres mensajes descrita a continuación. No se reanudaron las campañas históricas pendientes.
+
+## Prueba real posterior: envío, recepción, análisis y Supabase
+
+El 23/11/2026, entre las 14:07:56 y 14:08:14 de Santiago, se ejecutó una campaña nueva de **3 mensajes reales** usando las cuentas de prueba configuradas. Se utilizó un intervalo de dos segundos y una única invocación de envío.
+
+| Comprobación | Resultado |
+| --- | --- |
+| Aceptación por Gmail | 3 de 3, sin error de envío |
+| Recepción independiente en el buzón destinatario | 3 de 3 en Recibidos; ninguno en Spam ni Papelera |
+| Clasificación | 3 correctos: Información, Consulta y Reclamo |
+| Casos de contenido | Un normal y dos especiales: tildes y prioridad entre categorías |
+| Excel de pruebas | Generado y reabierto; cuatro hojas y tres filas de correos |
+| Repetición del análisis | NO_CHANGES, tres recibidos, cero duplicados y cero nuevos envíos |
+| Supabase | 32 registros remotos de cuatro ejecuciones coinciden con sus registros locales |
+| Descargas de logs | Cuatro archivos `.log`, contenido y hash verificados, vencimiento registrado a 15 días |
+
+Campaña: `ea92521e-301e-4e36-a4df-76b8921f3223`. Reporte local: `output/2470152a-22bc-458c-a836-73f08080559f/reporte_pruebas.xlsx`. Los logs descargados están en `runtime/logs/descargas/`; sus nombres, hashes y vencimientos se registran en la evidencia. El Excel se generó localmente, no se envió como adjunto.
+
+Evidencia sanitizada: [prueba_real_3_20261123.json](evidence/prueba_real_3_20261123.json). Los apartados siguientes conservan los resultados de la primera fase, sin envío.
 
 ## Suite automatizada
 

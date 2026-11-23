@@ -6,6 +6,8 @@ Proyecto Python para leer metadatos de correo, clasificar seis categorías, calc
 
 **Última validación, 23/11/2026:** 127 pruebas aprobadas; escenarios locales de 12, 300 y 1.000 casos correctos; lectura real de Gmail y esquema Supabase comprobados. No se enviaron correos. Excel/Outlook COM no están disponibles en este equipo. [Resultados y límites](docs/VALIDACION_2026-11-23.md).
 
+**Prueba real posterior, autorizada el mismo día:** 3 correos enviados, recibidos en la bandeja de entrada y clasificados correctamente; reporte Excel verificado, análisis repetido sin duplicados y 32 registros de auditoría comprobados en Supabase. [Evidencia del envío real](docs/evidence/prueba_real_3_20261123.json).
+
 Para entender la estructura, reglas de negocio, flujo completo, estados y límites, consulta
 [Funcionamiento y estructura del proyecto](docs/EXPLICACION_PROYECTO.md).
 
