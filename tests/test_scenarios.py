@@ -178,12 +178,12 @@ def test_resumed_rate_uses_accumulated_time(settings):
     assert m['messages_per_second']==round(6/m['total_active_seconds'],2)
 
 
-def test_ui_requires_explicit_confirmation(settings,monkeypatch):
+def test_ui_requires_explicit_confirmation(settings,monkeypatch,tk_window):
     import tkinter as tk
     import demo_presentacion as gui
     s=replace(settings,gmail_sender_address='sender@gmail.com',gmail_receiver_address='receiver@gmail.com')
     prepare(s,s.gmail_sender_address,s.gmail_receiver_address,2)
-    root=tk.Tk();root.withdraw()
+    root=tk_window;root.withdraw()
     try:
         window=gui.DemoWindow(root,s)
         calls=[]

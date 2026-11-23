@@ -22,8 +22,8 @@ def assert_visible(widget, window):
 
 
 @pytest.mark.parametrize('geometry', ['680x550', '800x600', '1160x678'])
-def test_messages_keep_actions_accessible(settings, geometry):
-    root = tk.Tk()
+def test_messages_keep_actions_accessible(settings, geometry, tk_window):
+    root = tk_window
     app = DemoWindow(root, settings)
     try:
         root.geometry(geometry)

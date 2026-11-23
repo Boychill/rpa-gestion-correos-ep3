@@ -6,6 +6,23 @@ from rpa.excel import create_template
 from rpa.store import Store, utcnow
 
 
+@pytest.fixture(scope='session')
+def tk_interpreter():
+    """Un intérprete Tcl por proceso; cada prueba usa su propia ventana."""
+    import tkinter as tk
+    root=tk.Tk();root.withdraw()
+    yield root
+    root.destroy()
+
+
+@pytest.fixture
+def tk_window(tk_interpreter):
+    import tkinter as tk
+    window=tk.Toplevel(tk_interpreter)
+    yield window
+    if window.winfo_exists():window.destroy()
+
+
 @pytest.fixture(autouse=True)
 def no_external_network(monkeypatch):
     """La suite puede probar localhost, pero nunca Gmail/Supabase reales."""

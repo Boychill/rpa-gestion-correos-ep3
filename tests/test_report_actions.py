@@ -115,9 +115,9 @@ def test_supabase_failure_keeps_accepted_report(prepared,monkeypatch):
     assert deliver_report(s,preview,execute=True)['send_state']=='ACEPTADO' and len(calls)==1
 
 
-def test_confirmation_and_delivery_evidence(prepared,monkeypatch,tmp_path):
+def test_confirmation_and_delivery_evidence(prepared,monkeypatch,tmp_path,tk_window):
     import demo_presentacion as gui
-    s,eid,_=prepared;root=tk.Tk();root.withdraw();app=gui.DemoWindow(root,s)
+    s,eid,_=prepared;root=tk_window;root.withdraw();app=gui.DemoWindow(root,s)
     try:
         preview=preview_report(s,eid,s.recipient);app.show_result({'report_preview':preview});calls=[]
         monkeypatch.setattr(app,'start',lambda *args,**kwargs:calls.append(args))
