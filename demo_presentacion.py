@@ -6,6 +6,8 @@ import queue
 import threading
 import tkinter as tk
 from tkinter import ttk, messagebox
+from html import unescape
+import re
 
 from rpa.config import Settings
 from rpa.demo_actions import DemoActions
@@ -13,12 +15,26 @@ from rpa.gmail_auth import authorize_with_audit
 from rpa.gmail_campaign import load, summary, send_preview
 from rpa.runtime import RPAError, profile_lock
 from rpa.scenarios import CONTENT, TECHNICAL, ScenarioConfig, preset, save_config, load_config
+from rpa.report_actions import available_reports, preview_report, deliver_report
+from rpa.campaign_report import export_campaign
 
 ROOT = Path(__file__).resolve().parent
 PRESETS = {'Rápida: 12 / 3 especiales':'quick', 'Real: 24 / 6 especiales':'real',
            'Carga local: 300 / 60 especiales':'load', 'Estrés local: 1.000 / 200 especiales':'stress',
            'Personalizado':None}
 ERRORS = {
+    'REPORT_LOCAL_ONLY':'El reporte es de una simulación. Puedes revisarlo sin enviarlo.',
+    'REPORT_RECIPIENT_NOT_ALLOWED':'Configura un destinatario válido en ALLOWED_RECIPIENTS antes de enviar el Excel.',
+    'REPORT_REAL_CALENDAR_REQUIRED':'El reporte necesita referencias de feriados reales para enviarse.',
+    'REPORT_FILE_MISSING':'No se encuentra el archivo del reporte. Genera o selecciona otro.',
+    'ATTACHMENT_CHANGED':'El Excel cambió después de prepararse. Se bloqueó el envío por integridad.',
+    'REPORT_PREVIEW_CHANGED':'La vista previa cambió. Vuelve a comprobarla antes de confirmar.',
+    'REPORT_EXECUTION_REVIEW':'La ejecución requiere revisión antes de enviar el reporte.',
+    'REPORT_PREPARADO':'El envío pudo interrumpirse; revisa su estado antes de continuar.',
+    'REPORT_EN_ENVIO':'El envío está iniciado o interrumpido. No se repetirá automáticamente.',
+    'ATTACHMENT_TOO_LARGE':'El adjunto debe ocupar menos de 3.000.000 bytes.',
+    'AUTHORIZATION_FAILED':'No se completó Google. Reabre la autorización y termina el acceso en el navegador.',
+    'CAMPAIGN_RECEPTION_INCOMPLETE':'Primero analiza la campaña y comprueba que llegaron todos sus mensajes.',
     'SCENARIO_TOTAL_MISMATCH':'El total debe ser normales + especiales (máximo local 1.000; Gmail 500).',
     'SCENARIO_QUANTITY_INVALID':'Usa cantidades enteras sin valores negativos.',
     'SCENARIO_DISTRIBUTION_MISMATCH':'La suma de escenarios debe coincidir con la cantidad de especiales.',
@@ -97,6 +113,7 @@ class DemoWindow:
         self.controls,self.inputs,self.campaigns,self.history=[],[],[],[]
         self.recent_events=[]
         self.live_received=0
+        self.report_preview=None;self.report_choices=[]
         window.title('RPA EP3 · Presentación y pruebas')
         width,height=min(1160,window.winfo_screenwidth()-40),min(900,window.winfo_screenheight()-90)
         window.geometry(f'{width}x{height}');window.minsize(min(680,width),min(550,height))
@@ -146,7 +163,7 @@ class DemoWindow:
         self.status_label.pack(fill='both',expand=True)
         self.last_width=None;root.bind('<Configure>',self.resize_labels)
         self.apply_config(preset('real'));self.preset_choice.set(list(PRESETS)[1])
-        self.refresh_saved();self.refresh_campaigns();self.refresh_history()
+        self.refresh_saved();self.refresh_campaigns();self.refresh_history();self.refresh_reports()
         window.protocol('WM_DELETE_WINDOW',self.close);self.after_id=window.after(200,self.tick)
 
     def button(self,parent,text,command):
@@ -213,6 +230,22 @@ class DemoWindow:
         self.button(page,'Actualizar historial de simulaciones',self.refresh_history).pack(anchor='w',pady=4)
         self.button(page,'Cargar resultado anterior',self.load_history).pack(anchor='w',pady=4)
         ttk.Button(page,text='Abrir carpeta de CSV, JSON y Excel',command=self.open_results).pack(anchor='w',pady=4)
+        ttk.Separator(page).pack(fill='x',pady=8)
+        ttk.Label(page,text='Enviar el Excel original: vista previa y confirmación separadas de los mensajes de prueba.').pack(anchor='w')
+        self.button(page,'Generar Excel de la campaña seleccionada',self.generate_campaign_report).pack(anchor='w',pady=4)
+        self.report_selector=self.combo(page,width=85);self.report_selector.pack(fill='x')
+        self.report_selector.bind('<<ComboboxSelected>>',self.invalidate_report_preview)
+        self.button(page,'Actualizar reportes disponibles',self.refresh_reports).pack(anchor='w',pady=4)
+        self.report_recipient=tk.StringVar(value=self.s.recipient)
+        ttk.Label(page,text='Destinatario del Excel (debe estar autorizado en la configuración)').pack(anchor='w')
+        entry=ttk.Entry(page,textvariable=self.report_recipient,width=55);entry.pack(anchor='w')
+        self.inputs.append((entry,'normal'));self.report_recipient.trace_add('write',self.invalidate_report_preview)
+        self.button(page,'Comprobar adjunto y ver correo',self.preview_excel).pack(anchor='w',pady=4)
+        self.button(page,'Confirmar envío del Excel por Gmail',self.send_excel).pack(anchor='w',pady=4)
+        self.report_status=tk.StringVar(value='Selecciona un reporte y comprueba la vista previa. Sin envío.')
+        ttk.Label(page,textvariable=self.report_status,wraplength=570).pack(anchor='w')
+        self.report_body=tk.Text(page,height=9,width=65,wrap='word',state='disabled')
+        self.report_body.pack(fill='x',pady=4)
         page=self.pages[6]
         ttk.Label(page,text='La simulación guarda logs aislados. Los errores esperados no son fallos reales.\nSupabase guarda auditoría; la recuperación permanece en SQLite.').pack(anchor='w',pady=8)
         ttk.Button(page,text='Abrir logs',command=lambda:self.open_path(self.logs_path)).pack(anchor='w',pady=4)
@@ -329,6 +362,44 @@ class DemoWindow:
 
     def emit(self,event):self.messages.put(('progress',event))
 
+    def refresh_reports(self):
+        previous=self.report_choices[self.report_selector.current()]['key'] if self.report_selector.current()>=0 else None
+        self.report_choices=available_reports(self.s)
+        self.report_selector['values']=[r['label'] for r in self.report_choices]
+        if self.report_choices:
+            self.report_selector.current(next((i for i,r in enumerate(self.report_choices) if r['key']==previous),0))
+        self.invalidate_report_preview()
+
+    def invalidate_report_preview(self,*args):
+        self.report_preview=None
+        self.report_status.set('Comprueba el adjunto y el destinatario antes de enviar.')
+
+    def generate_campaign_report(self):
+        if not self.campaign_id:
+            messagebox.showinfo('Selecciona una campaña','Selecciona una campaña recibida y analizada en la sección 3.');return
+        cid=self.campaign_id
+        self.start('Generando Excel consolidado, sin enviarlo',lambda:{'generated_report':export_campaign(self.s,cid)})
+
+    def preview_excel(self):
+        i=self.report_selector.current()
+        if i<0:
+            messagebox.showinfo('Selecciona un reporte','Ejecuta una simulación o genera el Excel de una campaña recibida.');return
+        key=self.report_choices[i]['key'];recipient=self.report_recipient.get()
+        self.report_preview=None
+        self.start('Comprobando integridad y preparando vista previa',lambda:{'report_preview':preview_report(self.s,key,recipient)})
+
+    def send_excel(self):
+        preview=self.report_preview
+        if not preview or not preview['can_send']:
+            messagebox.showinfo('Comprueba el reporte','Necesitas una vista previa válida de un reporte real y un destinatario autorizado.');return
+        if not messagebox.askyesno('Confirmar envío real del Excel',
+            f"De: {preview['sender']}\nPara: {preview['recipient']}\nArchivo: {preview['filename']}\n"
+            f"Tamaño: {preview['size']} bytes\nEjecución: {preview['execution_id']}\n\n"
+            '¿Enviar este Excel una vez por Gmail? La aceptación no confirma su entrega.'):
+            return
+        self.report_preview=None
+        self.start('Enviando reporte Excel',lambda:{'report_delivery':deliver_report(self.s,preview,execute=True)})
+
     def start(self,title,operation,active_campaign=False):
         if self.busy:return
         self.busy=True;self.stop.clear();self.recent_events=[];self.status.set(title);self.stage.set(title)
@@ -391,15 +462,45 @@ class DemoWindow:
                 f"{m['prepared']} preparados · {m['accepted']} aceptados por Gmail · {m['received']} recibidos · {m['classified']} clasificados",
                 f"{m['passed']} pruebas correctas · {m['failed']} fallidas · {m['pending']} pendientes",
                 f"{m['special']} especiales configurados · {m['special_validated']} comprobados · {m['special_pending']} pendientes",
+                f"Intentados: {m.get('attempted','No registrado')} · En revisión: {m.get('review','No registrado')} · Duplicados: {m['duplicates']}",
+                f"Errores esperados: {m.get('expected_errors',m['simulated_technical'])} · Inesperados: {m['unexpected_errors']}",
                 f"Fallos técnicos simulados: {m['simulated_technical']} · Fallos reales: {m['real_provider_failures']}",
                 f"Tiempo: {m['duration_seconds']:.2f} s · Promedio: {m['average_seconds']:.4f} s"]
         elif analysis:lines=[f"Recibidos: {analysis['received_unique']} de {analysis['expected']}",f"Correctos: {analysis['correct']} · Faltantes: {analysis['missing']}"]
         elif value.get('simulation'):lines=['SIMULACIÓN LOCAL · SIN ENVÍOS',json.dumps(value.get('metrics',{}),ensure_ascii=False)]
         if value.get('send'):
             sent=value['send'];lines.append(f"Envío: {sent['accepted']} aceptados. Estado: {sent.get('error') or 'tanda terminada'}")
+            if not scenarios:
+                states=sent.get('states',{})
+                lines.extend([f"Preparados: {sent.get('expected',0)} · Intentados: {sent.get('attempted','No registrado')} · Recibidos: {sent.get('received',0)}",
+                    f"Pendientes de aceptación: {sent.get('expected',0)-sent['accepted']} · En revisión: {sent.get('review',sum(states.get(k,0) for k in ('UNCERTAIN','BLOCKED','IN_FLIGHT')))}",
+                    f"Errores del proveedor en esta tanda: {sent.get('failed',0)} · Reintentos: {sent.get('retries',0)} · Tiempo: {sent.get('duration_seconds',0):.2f} s"])
         return '\n'.join(lines) if lines else json.dumps(value,ensure_ascii=False,indent=2)
 
     def show_result(self,value):
+        if 'generated_report' in value:
+            self.refresh_reports();self.set_report(value['generated_report']['path'])
+            eid=value['generated_report']['execution_id']
+            for i,r in enumerate(self.report_choices):
+                if r['execution_id']==eid:self.report_selector.current(i);break
+            self.report_status.set('Excel preparado. Comprueba el adjunto y la vista previa antes de enviar.')
+            self.show(self.report_status.get());return
+        if 'report_preview' in value:
+            preview=value['report_preview'];self.report_preview=preview;self.set_report(preview['path'])
+            labels={'DRY_RUN':'Excel preparado, sin enviar','ACEPTADO':'Excel aceptado por Gmail; entrega no confirmada',
+                    'ENTREGA_CONFIRMADA':'Entrega del Excel confirmada con evidencia','ENVIO_INCIERTO':'Envío incierto; revisar sin reenviar',
+                    'ERROR':'Envío bloqueado; requiere revisión','PENDIENTE_CUOTA':'Pendiente por cuota; no se reenvía automáticamente'}
+            text=f"Para: {preview['recipient'] or 'Sin configurar'}\nArchivo: {preview['filename']} · {preview['size']} bytes\nSHA256: {preview['sha256']}\n"+labels.get(preview['state'],preview['state'])
+            if not preview['can_send']:text+='\n'+friendly_error(preview['reason'])
+            self.report_status.set(text)
+            self.report_body.configure(state='normal');self.report_body.delete('1.0','end')
+            self.report_body.insert('end',preview['subject']+'\n\n'+unescape(re.sub('<[^>]+>',' ',preview['body'])))
+            self.report_body.configure(state='disabled');self.show(text);return
+        if 'report_delivery' in value:
+            self.refresh_reports();delivery=value['report_delivery'];state=delivery['send_state']
+            text={'ACEPTADO':'Excel aceptado por Gmail. Recepción todavía no confirmada.',
+                  'ENTREGA_CONFIRMADA':'Entrega del Excel confirmada con evidencia.'}.get(state,'Excel en revisión: '+state+'. No se reenviará automáticamente.')
+            self.report_status.set(text);self.show(text);return
         self.last_result=value;scenarios=value.get('scenario_report') or value.get('analysis',{}).get('scenario_report');rows=[]
         if scenarios:
             m=scenarios['summary'];self.counters.set(f"Preparados: {m['prepared']}   Aceptados: {m['accepted']}   Recibidos: {m['received']}   Clasificados: {m['classified']}")
@@ -415,6 +516,10 @@ class DemoWindow:
                     self.validation_tree.insert('','end',values=(row['type'],row['expected_category'] or row['expected_result'],
                         row['actual_category'] or row['actual_result'] or 'Pendiente',row['validation']))
         if value.get('report_path'):self.set_report(value['report_path'])
+        if not scenarios and value.get('send'):
+            sent=value['send']
+            self.counters.set(f"Preparados: {sent.get('expected',0)}   Aceptados: {sent['accepted']}   Recibidos: {sent.get('received',0)}")
+            self.special_counts.set('Análisis pendiente o no disponible; consulta el resultado del envío.')
         logs=value.get('logs') or value.get('analysis',{}).get('execution',{}).get('logs',{})
         if logs.get('file',{}).get('folder'):
             log_path=Path(logs['file']['folder']).resolve()
@@ -453,6 +558,7 @@ class DemoWindow:
                     self.show('\n'.join(self.recent_events))
                     if 'accepted' in value:
                         self.counters.set(f"Preparados: {value['total']}   Aceptados: {value['accepted']}   Recibidos confirmados antes de esta lectura: {self.live_received}")
+                        self.special_counts.set(f"Intentados: {value.get('attempted',value['accepted'])} · Aceptación no equivale a recepción")
                     if value.get('total'):
                         self.progress.stop();self.progress.configure(mode='determinate',value=100*value['done']/value['total'])
                     else:self.progress.configure(mode='indeterminate');self.progress.start(15)

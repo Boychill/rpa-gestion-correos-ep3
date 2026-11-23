@@ -1,8 +1,20 @@
 from pathlib import Path
 import pytest
+import socket
 from rpa.config import Settings
 from rpa.excel import create_template
 from rpa.store import Store, utcnow
+
+
+@pytest.fixture(autouse=True)
+def no_external_network(monkeypatch):
+    """La suite puede probar localhost, pero nunca Gmail/Supabase reales."""
+    original = socket.socket.connect
+    def guarded(sock, address):
+        if isinstance(address, tuple) and address[0] not in ('127.0.0.1', '::1', 'localhost'):
+            raise AssertionError('EXTERNAL_NETWORK_FORBIDDEN_IN_TESTS')
+        return original(sock, address)
+    monkeypatch.setattr(socket.socket, 'connect', guarded)
 
 
 @pytest.fixture

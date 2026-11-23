@@ -123,6 +123,9 @@ def test_failed_send_stops_and_never_retries_unknown(settings, failure):
         result = send(settings, campaign['id'], campaign['sender'], campaign['recipient'], client, 'token', interval=0, execute=True)
         assert not result['all_accepted'] and result['accepted']==0
         assert result['states']['PENDING']==2
+        from demo_presentacion import DemoWindow
+        description=DemoWindow.describe({'send':result})
+        assert 'Intentados: 1' in description and 'En revisión: 1' in description
         with pytest.raises(RPAError, match='CAMPAIGN_REVIEW_REQUIRED'):
             send(settings, campaign['id'], campaign['sender'], campaign['recipient'], client, 'token', interval=0, execute=True)
     assert len(calls)==1

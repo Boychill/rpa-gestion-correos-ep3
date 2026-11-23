@@ -95,9 +95,11 @@ def summary(settings, campaign_id):
     manifest = load(settings, campaign_id)
     with sqlite3.connect(directory(settings, campaign_id) / 'campaign.sqlite3') as db:
         states = dict(db.execute('SELECT state,COUNT(*) FROM deliveries GROUP BY state'))
+        attempted = db.execute('SELECT COUNT(*) FROM deliveries WHERE attempts>0').fetchone()[0]
     accepted = states.get('ACCEPTED', 0) + states.get('RECEIVED', 0)
     return dict(campaign_id=campaign_id, expected=manifest['count'], states=states,
-                accepted=accepted, received=states.get('RECEIVED', 0), all_accepted=accepted==manifest['count'])
+                accepted=accepted, received=states.get('RECEIVED', 0), all_accepted=accepted==manifest['count'],
+                attempted=attempted, review=sum(states.get(k,0) for k in ('UNCERTAIN','BLOCKED','IN_FLIGHT')))
 
 
 def raw_message(manifest, item):
@@ -147,6 +149,8 @@ def send(settings, campaign_id, sender, recipient, client=None, token=None, inte
         error = None
         attempted_now = 0
         retries_now = 0
+        accepted_total = db.execute("SELECT COUNT(*) FROM deliveries WHERE state IN ('ACCEPTED','RECEIVED')").fetchone()[0]
+        attempted_total = db.execute('SELECT COUNT(*) FROM deliveries WHERE attempts>0').fetchone()[0]
         try:
             token = token or authenticate_gmail(replace(settings, mailbox=sender), budget, send=True)
             client = client or httpx.Client(follow_redirects=False)
@@ -167,6 +171,7 @@ def send(settings, campaign_id, sender, recipient, client=None, token=None, inte
                     error = 'CAMPAIGN_ATTEMPTS_EXHAUSTED'
                     break
                 attempt = row['attempts']+1
+                attempted_total += int(row['attempts']==0)
                 attempted_now += 1
                 retries_now += int(attempt > 1)
                 raw = raw_message(manifest, item)
@@ -211,8 +216,9 @@ def send(settings, campaign_id, sender, recipient, client=None, token=None, inte
                     error = code
                     break
                 if progress:
-                    progress({'stage':'Aceptado por Gmail', 'done':summary(settings,campaign_id)['accepted'],
-                              'total':manifest['count'], 'accepted':summary(settings,campaign_id)['accepted']})
+                    progress({'stage':'Aceptado por Gmail', 'done':accepted_total+1,
+                              'total':manifest['count'], 'accepted':accepted_total+1, 'attempted':attempted_total})
+                accepted_total += 1
                 if interval:
                     budget.sleep(max(1.0, interval))
         except Exception as exc:
@@ -320,6 +326,7 @@ def analyze(settings, campaign_id, progress=None):
     totals = summarize(scenarios, mode='GMAIL', prepared=manifest['count'], accepted=state['accepted'],
         received=len(actual), classified=len(actual), duration=elapsed,
         retries=retries, provider_failures=provider_failures, duplicates=duplicates)
+    totals.update(attempted=state['attempted'], review=state['review'])
     report_folder = settings.output/result['execution_id']
     base_report = report_folder/'reporte.xlsx'
     check['scenario_report'] = export_results(folder,totals,scenarios)

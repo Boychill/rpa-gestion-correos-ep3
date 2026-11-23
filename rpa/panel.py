@@ -166,7 +166,7 @@ def create_app(settings):
                 if selection.execution_id and not store.row("SELECT id FROM executions WHERE id=?", (selection.execution_id,)):
                     raise RPAError("EXECUTION_NOT_FOUND")
                 records = (fetch_cloud_logs(settings, store, selection.execution_id) if selection.source == "SUPABASE"
-                           else log_records(store, selection.execution_id))
+                           else log_records(store, selection.execution_id, include_context=settings.supabase_context_enabled))
                 return save_log(settings, store, records, selection.source, selection.execution_id)
         except (RPAError, ValueError) as exc:
             raise HTTPException(400, exc.code if isinstance(exc, RPAError) else "LOG_CONFIG_INVALID") from exc

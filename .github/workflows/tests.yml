@@ -1,0 +1,58 @@
+name: Validación RPA
+on:
+  pull_request:
+    branches: [main]
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  windows-tests:
+    name: Windows · Python ${{ matrix.python }}
+    runs-on: windows-latest
+    timeout-minutes: 20
+    strategy:
+      fail-fast: false
+      matrix:
+        python: ['3.12', '3.13']
+    env:
+      SOURCE: FIXTURE
+      HOLIDAY_MODE: FIXTURE
+      MAIL_MODE: DRY_RUN
+      SEND_AUTHORIZED: 'false'
+      SUPABASE_ENABLED: 'false'
+      REQUIRE_EXCEL: 'false'
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python }}
+          cache: pip
+          cache-dependency-path: requirements-lock.txt
+      - name: Instalar dependencias
+        run: python -m pip install -r requirements-lock.txt
+      - name: Comprobar dependencias
+        run: python -m pip check
+      - name: Pruebas locales, sin credenciales
+        run: python -m pytest --junitxml=test-results/pytest.xml
+      - name: Publicar resultados
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: pytest-windows-${{ matrix.python }}
+          path: test-results/pytest.xml
+          if-no-files-found: warn
+      - name: Resumen
+        if: always()
+        shell: pwsh
+        run: |
+          if (Test-Path test-results/pytest.xml) {
+            [xml]$results = Get-Content test-results/pytest.xml
+            $suite = $results.testsuites.testsuite
+            "Python ${{ matrix.python }}: $($suite.tests) pruebas; $($suite.failures) fallos; $($suite.errors) errores; $($suite.skipped) omitidas." >> $env:GITHUB_STEP_SUMMARY
+          } else {
+            "No se generó XML de pytest. Revisar los pasos anteriores." >> $env:GITHUB_STEP_SUMMARY
+          }
